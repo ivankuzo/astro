@@ -1,0 +1,9 @@
+{
+    "name": "astro-farm-game-core",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/astro-farm/game-core/src",
+    "projectType": "library",
+    "tags": [],
+    "// targets": "to see all targets run: nx show project astro-farm-game-core --web",
+    "targets": {}
+}

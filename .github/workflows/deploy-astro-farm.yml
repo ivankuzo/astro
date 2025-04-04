@@ -1,0 +1,71 @@
+name: Deploy Astro Farm
+
+on:
+    workflow_run:
+        workflows: ['CI']
+        branches: [main]
+        types:
+            - completed
+
+jobs:
+    deploy:
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        runs-on: ubuntu-latest
+        environment: production
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: 'npm'
+
+            - name: Install dependencies
+              run: npm ci --legacy-peer-deps
+
+            - name: Build applications
+              run: |
+                  npx nx build astro-farm-client
+                  npx nx build astro-farm-server
+
+            - name: Setup SSH key
+              run: |
+                  mkdir -p ~/.ssh
+                  echo "${{ secrets.ASTRO_FARM_SSH_KEY }}" > ~/.ssh/id_rsa
+                  chmod 600 ~/.ssh/id_rsa
+                  ssh-keyscan -H ${{ secrets.ASTRO_FARM_SSH_HOST }} >> ~/.ssh/known_hosts
+                  chmod 644 ~/.ssh/known_hosts
+
+            - name: Create target directory
+              run: ssh ${{ secrets.ASTRO_FARM_SSH_USERNAME }}@${{ secrets.ASTRO_FARM_SSH_HOST }} "mkdir -p /var/www/astro-farm"
+
+            - name: Copy server build
+              run: |
+                  scp -r dist/apps/astro-farm-server/* ${{ secrets.ASTRO_FARM_SSH_USERNAME }}@${{ secrets.ASTRO_FARM_SSH_HOST }}:/var/www/astro-farm/
+
+            - name: Copy client build
+              run: |
+                  ssh ${{ secrets.ASTRO_FARM_SSH_USERNAME }}@${{ secrets.ASTRO_FARM_SSH_HOST }} "mkdir -p /var/www/astro-farm/public"
+                  scp -r dist/apps/astro-farm-client/* ${{ secrets.ASTRO_FARM_SSH_USERNAME }}@${{ secrets.ASTRO_FARM_SSH_HOST }}:/var/www/astro-farm/public/
+
+            - name: Create .env file
+              run: |
+                  ssh ${{ secrets.ASTRO_FARM_SSH_USERNAME }}@${{ secrets.ASTRO_FARM_SSH_HOST }} "cat > /var/www/astro-farm/.env << 'EOL'
+                  SESSION_SECRET_JWT=${{ secrets.SESSION_SECRET_JWT }}
+                  ASTRO_FARM_MONGO_URI=${{ secrets.ASTRO_FARM_MONGO_URI }}
+                  ASTRO_FARM_PORT=${{ vars.ASTRO_FARM_PORT }}
+                  NODE_ENV=production
+                  EOL"
+
+            - name: Install dependencies and start application
+              run: |
+                  ssh ${{ secrets.ASTRO_FARM_SSH_USERNAME }}@${{ secrets.ASTRO_FARM_SSH_HOST }} "cd /var/www/astro-farm && npm ci --production --legacy-peer-deps && pm2 delete astro-farm || true && pm2 start main.js --name astro-farm --env production && pm2 save"
+
+            - name: Clean up SSH key
+              if: always()
+              run: rm -f ~/.ssh/id_rsa

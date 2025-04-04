@@ -1,0 +1,9 @@
+{
+    "name": "session-api-contracts",
+    "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "libs/session/api-contracts/src",
+    "projectType": "library",
+    "tags": [],
+    "// targets": "to see all targets run: nx show project session-api-contracts --web",
+    "targets": {}
+}

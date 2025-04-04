@@ -1,0 +1,9 @@
+{
+  "name": "astro-farm-client",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/astro-farm-client/src",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project astro-farm-client --web",
+  "targets": {}
+}

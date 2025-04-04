@@ -1,0 +1,6 @@
+export { default as InfoIcon } from './info-icon.svg?react'
+export { default as MenuBackdrop } from './menu-backdrop.svg?react'
+export { default as MinusIcon } from './minus.svg?react'
+export { default as PlusIcon } from './plus.svg?react'
+export { default as XIcon } from './x-icon.svg?react'
+export { default as CheckmarkIcon } from './checkmark.svg?react'

@@ -1,0 +1,35 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "es2015",
+        "module": "esnext",
+        "lib": ["es2020", "dom"],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@astro/astro-farm-api-contracts": ["libs/astro-farm/api-contracts/src/index.ts"],
+            "@astro/astro-farm-game-core": ["libs/astro-farm/game-core/src/index.ts"],
+            "@astro/client-api": ["libs/client/api/src/index.ts"],
+            "@astro/client-cn": ["libs/client/cn/src/index.ts"],
+            "@astro/client-errors": ["libs/client/erros/src/index.ts"],
+            "@astro/client-use-media-query": ["libs/client/use-media-query/src/index.ts"],
+            "@astro/server/errors": ["libs/server/errors/src/index.ts"],
+            "@astro/server/logger": ["libs/server/logger/src/index.ts"],
+            "@astro/server/redis": ["libs/server/redis/src/index.ts"],
+            "@astro/server/validation": ["libs/server/validation/src/index.ts"],
+            "@astro/session-api-contracts": ["libs/session/api-contracts/src/index.ts"],
+            "@astro/session-client": ["libs/session/client/src/index.ts"],
+            "@astro/session-server": ["libs/session/server/src/index.ts"]
+        },
+        "strictNullChecks": true
+    },
+    "exclude": ["node_modules", "tmp"]
+}
