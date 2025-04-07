@@ -67,7 +67,7 @@ export const SEEDS: Seed[] = [
         growthTime: 3,
         xpGain: 8,
         igcYield: 12,
-        plantEnergy: 1,
+        plantEnergy: 4,
         harvestEnergy: 1,
         recoveryRate: 1.0,
         price: 20,
