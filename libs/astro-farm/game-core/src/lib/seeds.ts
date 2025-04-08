@@ -13,446 +13,407 @@ export interface GrowthSpeedLevelDetails {
 
 export interface Seed {
     type: SeedType
-    name: string
     level: number
-    growthTime: number
-    xpGain: number
-    igcYield: number
-    plantEnergy: number
-    harvestEnergy: number
-    recoveryRate: number
-    price: number
-    levelRequired: number
-}
-
-export const getSeed = (seedId: SeedId): Seed => {
-    const seed = SEEDS.find(seed => `${seed.type}_${seed.level}` === seedId)
-    if (!seed) {
-        throw new Error(`Seed with id ${seedId} not found`)
+    name: string
+    growthTimeSeconds: number
+    xp: number
+    igc: number
+    energy: {
+        plant: number
+        harvest: number
     }
-    return seed
+    recoveryRate: number
 }
 
-export const shouldRecoverSeed = (seedId: SeedId) => {
-    const seed = getSeed(seedId)
-    return Math.random() < seed.recoveryRate
-}
-
-export const isSeedUnlocked = (seedId: SeedId, xp: number): boolean => {
-    const seed = getSeed(seedId)
-    const level = getLevelByXp(xp)
-    return level >= seed.levelRequired
-}
-
-export const getSeedIdBySeed = (seed: Seed): SeedId => {
-    return `${seed.type}_${seed.level}` as SeedId
-}
-
-export const GROWTH_SPEED_LEVELS: Record<number, GrowthSpeedLevelDetails> = {
-    1: { bonus: 1, cost: 0 },
-    2: { bonus: 0.92, cost: 500 },
-    3: { bonus: 0.84, cost: 1500 },
-    4: { bonus: 0.76, cost: 3000 },
-    5: { bonus: 0.68, cost: 5000 },
-    6: { bonus: 0.6, cost: 8000 },
-}
-
-
-export const SEEDS: Seed[] = [
-    // Solar Seeds
-    {
-        type: 'solar',
-        name: 'Solgrass',
-        level: 1,
-        growthTime: 3,
-        xpGain: 8,
-        igcYield: 12,
-        plantEnergy: 1,
-        harvestEnergy: 1,
-        recoveryRate: 1.0,
-        price: 20,
-        levelRequired: 1,
-    },
-    {
-        type: 'solar',
-        name: 'Flareberry',
-        level: 2,
-        growthTime: 5,
-        xpGain: 16,
-        igcYield: 24,
-        plantEnergy: 4,
-        harvestEnergy: 4,
-        recoveryRate: 1.0,
-        price: 40,
-        levelRequired: 2,
-    },
-    {
-        type: 'solar',
-        name: 'Sunvine',
-        level: 3,
-        growthTime: 60,
-        xpGain: 24,
-        igcYield: 36,
-        plantEnergy: 7,
-        harvestEnergy: 7,
-        recoveryRate: 1.0,
-        price: 59,
-        levelRequired: 3,
-    },
-    {
-        type: 'solar',
-        name: 'Photosynthia',
-        level: 4,
-        growthTime: 300,
-        xpGain: 33,
-        igcYield: 73,
-        plantEnergy: 12,
-        harvestEnergy: 12,
-        recoveryRate: 0.95,
-        price: 132,
-        levelRequired: 4,
-    },
-    {
-        type: 'solar',
-        name: 'Blazelily',
-        level: 5,
-        growthTime: 3600,
-        xpGain: 30,
-        igcYield: 85,
-        plantEnergy: 17,
-        harvestEnergy: 17,
-        recoveryRate: 0.9,
-        price: 154,
-        levelRequired: 5,
-    },
-    {
-        type: 'solar',
-        name: 'Aurora Fern',
-        level: 6,
-        growthTime: 7200,
-        xpGain: 50,
-        igcYield: 97,
-        plantEnergy: 20,
-        harvestEnergy: 20,
-        recoveryRate: 0.85,
-        price: 176,
-        levelRequired: 6,
-    },
-    {
-        type: 'solar',
-        name: 'Inferno Cactus',
-        level: 7,
-        growthTime: 14400,
-        xpGain: 87,
-        igcYield: 128,
-        plantEnergy: 30,
-        harvestEnergy: 30,
-        recoveryRate: 0.8,
-        price: 278,
-        levelRequired: 7,
-    },
-    {
-        type: 'solar',
-        name: 'Solaris Bloom',
-        level: 8,
-        growthTime: 28800,
-        xpGain: 99,
-        igcYield: 145,
-        plantEnergy: 35,
-        harvestEnergy: 35,
-        recoveryRate: 0.75,
-        price: 317,
-        levelRequired: 8,
-    },
-    {
-        type: 'solar',
-        name: 'Heliothorn',
-        level: 9,
-        growthTime: 43200,
-        xpGain: 112,
-        igcYield: 164,
-        plantEnergy: 41,
-        harvestEnergy: 41,
-        recoveryRate: 0.7,
-        price: 358,
-        levelRequired: 9,
-    },
-    {
-        type: 'solar',
-        name: 'Supernova Orchid',
-        level: 10,
-        growthTime: 86400,
-        xpGain: 374,
-        igcYield: 544,
-        plantEnergy: 50,
-        harvestEnergy: 50,
-        recoveryRate: 0.65,
-        price: 1485,
-        levelRequired: 10,
-    },
-
-    // Hydrogen Seeds
-    {
-        type: 'hydrogen',
-        name: 'Dewbud',
-        level: 1,
-        growthTime: 3,
-        xpGain: 17,
-        igcYield: 10,
-        plantEnergy: 3,
-        harvestEnergy: 3,
-        recoveryRate: 1.0,
-        price: 18,
-        levelRequired: 1,
-    },
-    {
-        type: 'hydrogen',
-        name: 'Mistleaf',
-        level: 2,
-        growthTime: 10,
-        xpGain: 29,
-        igcYield: 22,
-        plantEnergy: 6,
-        harvestEnergy: 6,
-        recoveryRate: 1.0,
-        price: 40,
-        levelRequired: 2,
-    },
-    {
-        type: 'hydrogen',
-        name: 'Hydropod',
-        level: 3,
-        growthTime: 300,
-        xpGain: 39,
-        igcYield: 33,
-        plantEnergy: 8,
-        harvestEnergy: 8,
-        recoveryRate: 1.0,
-        price: 59,
-        levelRequired: 3,
-    },
-    {
-        type: 'hydrogen',
-        name: 'Geyserbloom',
-        level: 4,
-        growthTime: 600,
-        xpGain: 48,
-        igcYield: 44,
-        plantEnergy: 11,
-        harvestEnergy: 11,
-        recoveryRate: 0.95,
-        price: 88,
-        levelRequired: 4,
-    },
-    {
-        type: 'hydrogen',
-        name: 'Neptune Reed',
-        level: 5,
-        growthTime: 1800,
-        xpGain: 58,
-        igcYield: 61,
-        plantEnergy: 14,
-        harvestEnergy: 14,
-        recoveryRate: 0.9,
-        price: 122,
-        levelRequired: 5,
-    },
-    {
-        type: 'hydrogen',
-        name: 'Aquafern',
-        level: 6,
-        growthTime: 5400,
-        xpGain: 68,
-        igcYield: 73,
-        plantEnergy: 19,
-        harvestEnergy: 19,
-        recoveryRate: 0.85,
-        price: 146,
-        levelRequired: 6,
-    },
-    {
-        type: 'hydrogen',
-        name: 'Tidefruit',
-        level: 7,
-        growthTime: 14400,
-        xpGain: 117,
-        igcYield: 127,
-        plantEnergy: 29,
-        harvestEnergy: 29,
-        recoveryRate: 0.8,
-        price: 305,
-        levelRequired: 7,
-    },
-    {
-        type: 'hydrogen',
-        name: 'Plasmabud',
-        level: 8,
-        growthTime: 28800,
-        xpGain: 133,
-        igcYield: 132,
-        plantEnergy: 33,
-        harvestEnergy: 33,
-        recoveryRate: 0.75,
-        price: 317,
-        levelRequired: 8,
-    },
-    {
-        type: 'hydrogen',
-        name: 'CryoLily',
-        level: 9,
-        growthTime: 43200,
-        xpGain: 148,
-        igcYield: 149,
-        plantEnergy: 43,
-        harvestEnergy: 43,
-        recoveryRate: 0.7,
-        price: 358,
-        levelRequired: 9,
-    },
-    {
-        type: 'hydrogen',
-        name: 'Stormlotus',
-        level: 10,
-        growthTime: 86400,
-        xpGain: 390,
-        igcYield: 495,
-        plantEnergy: 51,
-        harvestEnergy: 51,
-        recoveryRate: 0.65,
-        price: 1485,
-        levelRequired: 10,
-    },
-
-    // Carbon Seeds
+export const seeds: Seed[] = [
     {
         type: 'carbon',
+        level: 1,
         name: 'Mossroot',
-        level: 1,
-        growthTime: 3,
-        xpGain: 8,
-        igcYield: 16,
-        plantEnergy: 2,
-        harvestEnergy: 2,
-        recoveryRate: 1.0,
-        price: 22,
-        levelRequired: 1,
+        growthTimeSeconds: 3,
+        xp: 8.0,
+        igc: 17.0,
+        energy: {
+            plant: 2,
+            harvest: 2
+        },
+        recoveryRate: 1.0
     },
     {
         type: 'carbon',
-        name: 'Cinderleaf',
         level: 2,
-        growthTime: 5,
-        xpGain: 13,
-        igcYield: 29,
-        plantEnergy: 6,
-        harvestEnergy: 6,
-        recoveryRate: 1.0,
-        price: 40,
-        levelRequired: 2,
+        name: 'Cinderleaf',
+        growthTimeSeconds: 5,
+        xp: 13.0,
+        igc: 49.0,
+        energy: {
+            plant: 6,
+            harvest: 6
+        },
+        recoveryRate: 1.0
     },
     {
         type: 'carbon',
-        name: 'Fungal Sprout',
         level: 3,
-        growthTime: 57,
-        xpGain: 22,
-        igcYield: 47,
-        plantEnergy: 9,
-        harvestEnergy: 9,
-        recoveryRate: 1.0,
-        price: 65,
-        levelRequired: 3,
+        name: 'Fungal Sprout',
+        growthTimeSeconds: 57,
+        xp: 22.0,
+        igc: 58.0,
+        energy: {
+            plant: 9,
+            harvest: 9
+        },
+        recoveryRate: 1.0
     },
     {
         type: 'carbon',
-        name: 'Emberstalk',
         level: 4,
-        growthTime: 285,
-        xpGain: 30,
-        igcYield: 62,
-        plantEnergy: 15,
-        harvestEnergy: 15,
-        recoveryRate: 0.95,
-        price: 96,
-        levelRequired: 4,
+        name: 'Emberstalk',
+        growthTimeSeconds: 285,
+        xp: 31.0,
+        igc: 95.0,
+        energy: {
+            plant: 15,
+            harvest: 15
+        },
+        recoveryRate: 0.95
     },
     {
         type: 'carbon',
-        name: 'Charbloom',
         level: 5,
-        growthTime: 3420,
-        xpGain: 38,
-        igcYield: 78,
-        plantEnergy: 22,
-        harvestEnergy: 22,
-        recoveryRate: 0.9,
-        price: 120,
-        levelRequired: 5,
+        name: 'Charbloom',
+        growthTimeSeconds: 3420,
+        xp: 58.0,
+        igc: 165.0,
+        energy: {
+            plant: 22,
+            harvest: 22
+        },
+        recoveryRate: 0.9
     },
     {
         type: 'carbon',
-        name: 'Shadowvine',
         level: 6,
-        growthTime: 6840,
-        xpGain: 41,
-        igcYield: 94,
-        plantEnergy: 29,
-        harvestEnergy: 29,
-        recoveryRate: 0.85,
-        price: 144,
-        levelRequired: 6,
+        name: 'Shadowvine',
+        growthTimeSeconds: 6840,
+        xp: 78.0,
+        igc: 190.0,
+        energy: {
+            plant: 29,
+            harvest: 29
+        },
+        recoveryRate: 0.85
     },
     {
         type: 'carbon',
-        name: 'Coalberry',
         level: 7,
-        growthTime: 13680,
-        xpGain: 83,
-        igcYield: 164,
-        plantEnergy: 37,
-        harvestEnergy: 37,
-        recoveryRate: 0.8,
-        price: 302,
-        levelRequired: 7,
+        name: 'Coalberry',
+        growthTimeSeconds: 13680,
+        xp: 94.0,
+        igc: 206.0,
+        energy: {
+            plant: 37,
+            harvest: 37
+        },
+        recoveryRate: 0.8
     },
     {
         type: 'carbon',
-        name: 'Ashbloom',
         level: 8,
-        growthTime: 27360,
-        xpGain: 110,
-        igcYield: 290,
-        plantEnergy: 41,
-        harvestEnergy: 41,
-        recoveryRate: 0.75,
-        price: 535,
-        levelRequired: 8,
+        name: 'Ashbloom',
+        growthTimeSeconds: 27360,
+        xp: 115.0,
+        igc: 222.0,
+        energy: {
+            plant: 41,
+            harvest: 41
+        },
+        recoveryRate: 0.75
     },
     {
         type: 'carbon',
-        name: 'Onyx Thistle',
         level: 9,
-        growthTime: 41040,
-        xpGain: 119,
-        igcYield: 377,
-        plantEnergy: 49,
-        harvestEnergy: 49,
-        recoveryRate: 0.7,
-        price: 696,
-        levelRequired: 9,
+        name: 'Onyx Thistle',
+        growthTimeSeconds: 41040,
+        xp: 169.0,
+        igc: 290.0,
+        energy: {
+            plant: 49,
+            harvest: 49
+        },
+        recoveryRate: 0.7
     },
     {
         type: 'carbon',
-        name: 'Titanwood',
         level: 10,
-        growthTime: 82080,
-        xpGain: 230,
-        igcYield: 871,
-        plantEnergy: 59,
-        harvestEnergy: 59,
-        recoveryRate: 0.65,
-        price: 2010,
-        levelRequired: 10,
+        name: 'Titanwood',
+        growthTimeSeconds: 82080,
+        xp: 230.0,
+        igc: 531.0,
+        energy: {
+            plant: 59,
+            harvest: 59
+        },
+        recoveryRate: 0.65
     },
-
+    {
+        type: 'hydrogen',
+        level: 1,
+        name: 'Dewbud',
+        growthTimeSeconds: 3,
+        xp: 17.0,
+        igc: 21.0,
+        energy: {
+            plant: 3,
+            harvest: 3
+        },
+        recoveryRate: 1.0
+    },
+    {
+        type: 'hydrogen',
+        level: 2,
+        name: 'Mistleaf',
+        growthTimeSeconds: 10,
+        xp: 29.0,
+        igc: 41.0,
+        energy: {
+            plant: 6,
+            harvest: 6
+        },
+        recoveryRate: 1.0
+    },
+    {
+        type: 'hydrogen',
+        level: 3,
+        name: 'Hydropod',
+        growthTimeSeconds: 300,
+        xp: 39.0,
+        igc: 51.0,
+        energy: {
+            plant: 8,
+            harvest: 8
+        },
+        recoveryRate: 1.0
+    },
+    {
+        type: 'hydrogen',
+        level: 4,
+        name: 'Geyserbloom',
+        growthTimeSeconds: 600,
+        xp: 48.0,
+        igc: 66.0,
+        energy: {
+            plant: 11,
+            harvest: 11
+        },
+        recoveryRate: 0.95
+    },
+    {
+        type: 'hydrogen',
+        level: 5,
+        name: 'Neptune Reed',
+        growthTimeSeconds: 1800,
+        xp: 58.0,
+        igc: 79.0,
+        energy: {
+            plant: 14,
+            harvest: 14
+        },
+        recoveryRate: 0.9
+    },
+    {
+        type: 'hydrogen',
+        level: 6,
+        name: 'Aquafern',
+        growthTimeSeconds: 5400,
+        xp: 68.0,
+        igc: 120.0,
+        energy: {
+            plant: 19,
+            harvest: 19
+        },
+        recoveryRate: 0.85
+    },
+    {
+        type: 'hydrogen',
+        level: 7,
+        name: 'Tidefruit',
+        growthTimeSeconds: 14400,
+        xp: 117.0,
+        igc: 190.0,
+        energy: {
+            plant: 29,
+            harvest: 29
+        },
+        recoveryRate: 0.8
+    },
+    {
+        type: 'hydrogen',
+        level: 8,
+        name: 'Plasmabud',
+        growthTimeSeconds: 28800,
+        xp: 133.0,
+        igc: 214.0,
+        energy: {
+            plant: 33,
+            harvest: 33
+        },
+        recoveryRate: 0.75
+    },
+    {
+        type: 'hydrogen',
+        level: 9,
+        name: 'CryoLily',
+        growthTimeSeconds: 43200,
+        xp: 148.0,
+        igc: 300.0,
+        energy: {
+            plant: 43,
+            harvest: 43
+        },
+        recoveryRate: 0.7
+    },
+    {
+        type: 'hydrogen',
+        level: 10,
+        name: 'Stormlotus',
+        growthTimeSeconds: 86400,
+        xp: 390.0,
+        igc: 499.0,
+        energy: {
+            plant: 51,
+            harvest: 51
+        },
+        recoveryRate: 0.65
+    },
+    {
+        type: 'solar',
+        level: 1,
+        name: 'Solgrass',
+        growthTimeSeconds: 3,
+        xp: 3.0,
+        igc: 11.0,
+        energy: {
+            plant: 1,
+            harvest: 1
+        },
+        recoveryRate: 1.0
+    },
+    {
+        type: 'solar',
+        level: 2,
+        name: 'Flareberry',
+        growthTimeSeconds: 5,
+        xp: 7.0,
+        igc: 48.0,
+        energy: {
+            plant: 4,
+            harvest: 4
+        },
+        recoveryRate: 1.0
+    },
+    {
+        type: 'solar',
+        level: 3,
+        name: 'Sunvine',
+        growthTimeSeconds: 60,
+        xp: 11.0,
+        igc: 46.0,
+        energy: {
+            plant: 7,
+            harvest: 7
+        },
+        recoveryRate: 1.0
+    },
+    {
+        type: 'solar',
+        level: 4,
+        name: 'Photosynthia',
+        growthTimeSeconds: 300,
+        xp: 22.0,
+        igc: 84.0,
+        energy: {
+            plant: 12,
+            harvest: 12
+        },
+        recoveryRate: 0.95
+    },
+    {
+        type: 'solar',
+        level: 5,
+        name: 'Blazelily',
+        growthTimeSeconds: 3600,
+        xp: 29.0,
+        igc: 128.0,
+        energy: {
+            plant: 17,
+            harvest: 17
+        },
+        recoveryRate: 0.9
+    },
+    {
+        type: 'solar',
+        level: 6,
+        name: 'Aurora Fern',
+        growthTimeSeconds: 7200,
+        xp: 41.0,
+        igc: 160.0,
+        energy: {
+            plant: 20,
+            harvest: 20
+        },
+        recoveryRate: 0.85
+    },
+    {
+        type: 'solar',
+        level: 7,
+        name: 'Inferno Cactus',
+        growthTimeSeconds: 14400,
+        xp: 87.0,
+        igc: 210.0,
+        energy: {
+            plant: 30,
+            harvest: 30
+        },
+        recoveryRate: 0.8
+    },
+    {
+        type: 'solar',
+        level: 8,
+        name: 'Solaris Bloom',
+        growthTimeSeconds: 28800,
+        xp: 99.0,
+        igc: 228.0,
+        energy: {
+            plant: 35,
+            harvest: 35
+        },
+        recoveryRate: 0.75
+    },
+    {
+        type: 'solar',
+        level: 9,
+        name: 'Heliothorn',
+        growthTimeSeconds: 43200,
+        xp: 112.0,
+        igc: 246.0,
+        energy: {
+            plant: 41,
+            harvest: 41
+        },
+        recoveryRate: 0.7
+    },
+    {
+        type: 'solar',
+        level: 10,
+        name: 'Supernova Orchid',
+        growthTimeSeconds: 86400,
+        xp: 374.0,
+        igc: 379.0,
+        energy: {
+            plant: 50,
+            harvest: 50
+        },
+        recoveryRate: 0.65
+    }
 ];
