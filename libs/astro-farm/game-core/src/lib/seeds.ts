@@ -451,34 +451,3 @@ export const SEEDS: Seed[] = [
     },
 ];
 
-export const getSeed = (seedId: SeedId): Seed => {
-    const seed = SEEDS.find(seed => `${seed.type}_${seed.level}` === seedId)
-    if (!seed) {
-        throw new Error(`Seed with id ${seedId} not found`)
-    }
-    return seed
-}
-
-export const shouldRecoverSeed = (seedId: SeedId) => {
-    const seed = getSeed(seedId)
-    return Math.random() < seed.recoveryRate
-}
-
-export const isSeedUnlocked = (seedId: SeedId, xp: number): boolean => {
-    const seed = getSeed(seedId)
-    const level = getLevelByXp(xp)
-    return level >= seed.levelRequired
-}
-
-export const getSeedIdBySeed = (seed: Seed): SeedId => {
-    return `${seed.type}_${seed.level}` as SeedId
-}
-
-export const GROWTH_SPEED_LEVELS: Record<number, GrowthSpeedLevelDetails> = {
-    1: { bonus: 1, cost: 0 },
-    2: { bonus: 0.92, cost: 500 },
-    3: { bonus: 0.84, cost: 1500 },
-    4: { bonus: 0.76, cost: 3000 },
-    5: { bonus: 0.68, cost: 5000 },
-    6: { bonus: 0.6, cost: 8000 },
-}
