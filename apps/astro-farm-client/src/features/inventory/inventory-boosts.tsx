@@ -1,4 +1,4 @@
-import { BoostType, BoostInventory, BoostsByEffect, BOOSTS } from '@astro/astro-farm-game-core'
+import { BoostInventory, BoostId, getBoost } from '@astro/astro-farm-game-core'
 
 import { BoostCard } from '../../shared/components/boost-card'
 
@@ -8,24 +8,20 @@ import { Button } from '../../shared/ui/button'
 import { InventoryModal } from './inventory-modal'
 import NiceModal from '@ebay/nice-modal-react'
 
-const InventoryEnergyBoostCard = ({
-    boostType,
-}: {
-    boostType: BoostsByEffect<'energyRestore'>
-}) => {
+const InventoryEnergyBoostCard = ({ boostId }: { boostId: BoostId<'energyRestore'> }) => {
     const energyRestoreBoostMutation = useEnergyRestoreBoost()
 
     const handle = async () => {
         await energyRestoreBoostMutation.mutateAsync({
             body: {
-                boostType,
+                boostId,
             },
         })
         await NiceModal.hide(InventoryModal)
     }
 
     return (
-        <BoostCard boostType={boostType}>
+        <BoostCard boost={getBoost(boostId)}>
             <Button
                 variant='orange'
                 size='sm'
@@ -39,16 +35,16 @@ const InventoryEnergyBoostCard = ({
 }
 
 const InventoryGrowthTimeReductionBoostCard = ({
-    boostType,
+    boostId,
 }: {
-    boostType: BoostsByEffect<'growthTimeReduction'>
+    boostId: BoostId<'growthTimeReduction'>
 }) => {
     const handle = async () => {
         await NiceModal.hide(InventoryModal)
     }
 
     return (
-        <BoostCard boostType={boostType}>
+        <BoostCard boost={getBoost(boostId)}>
             <Button variant='orange' size='sm' onClick={handle}>
                 Choose Field
             </Button>
@@ -58,27 +54,28 @@ const InventoryGrowthTimeReductionBoostCard = ({
 
 export const InventoryBoosts = () => {
     const { data: game } = useGame()
-    const boostInventory = game?.boostInventory || ({} as BoostInventory)
+    const boostInventory = game?.boostInventory
+    if (!boostInventory) return null
 
-    const availableBoosts = Object.keys(boostInventory)
-        .filter(boostType => boostInventory[boostType as BoostType] > 0)
-        .map(boostType => boostType as BoostType)
+    const availableBoostIds = Object.keys(boostInventory).filter(
+        boostId => boostInventory[boostId as BoostId] > 0
+    )
 
-    const growthTimeReductionBoosts = availableBoosts.filter(
-        boostType => BOOSTS[boostType].effect.type === 'growthTimeReduction'
-    ) as BoostsByEffect<'growthTimeReduction'>[]
+    const growthTimeReductionBoostIds = availableBoostIds.filter(boostId =>
+        boostId.startsWith('growthTimeReduction_')
+    ) as BoostId<'growthTimeReduction'>[]
 
-    const energyRestoreBoosts = availableBoosts.filter(
-        boostType => BOOSTS[boostType].effect.type === 'energyRestore'
-    ) as BoostsByEffect<'energyRestore'>[]
+    const energyRestoreBoostIds = availableBoostIds.filter(boostId =>
+        boostId.startsWith('energyRestore_')
+    ) as BoostId<'energyRestore'>[]
 
     return (
         <div className='space-y-4'>
-            {energyRestoreBoosts.map(boostType => (
-                <InventoryEnergyBoostCard key={boostType} boostType={boostType} />
+            {energyRestoreBoostIds.map(boostId => (
+                <InventoryEnergyBoostCard key={boostId} boostId={boostId} />
             ))}
-            {growthTimeReductionBoosts.map(boostType => (
-                <InventoryGrowthTimeReductionBoostCard key={boostType} boostType={boostType} />
+            {growthTimeReductionBoostIds.map(boostId => (
+                <InventoryGrowthTimeReductionBoostCard key={boostId} boostId={boostId} />
             ))}
         </div>
     )

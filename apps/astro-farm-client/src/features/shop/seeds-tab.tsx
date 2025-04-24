@@ -80,7 +80,7 @@ const SeedContent = ({ category }: { category: SeedCategory }) => {
     const filteredSeeds = SEEDS.filter(seed => category === 'all' || seed.type === category)
 
     return (
-        <div className='grid grid-cols-3 gap-4'>
+        <div className='grid grid-cols-3 gap-2'>
             {filteredSeeds.map(seed => {
                 return <PlantCardBuy key={getSeedIdBySeed(seed)} seed={seed} />
             })}

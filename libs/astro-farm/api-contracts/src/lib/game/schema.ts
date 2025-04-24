@@ -2,11 +2,11 @@ import { z } from 'zod'
 
 import {
     BOOSTS,
-    BoostType,
-    BoostsByEffect,
+    BoostId,
     DomeUpgradeType,
     FieldNumber,
     SeedId,
+    getBoostIdsByType,
 } from '@astro/astro-farm-game-core'
 
 const fieldNumberSchema = z
@@ -21,15 +21,38 @@ const seedIdSchema = z
     .regex(/^(carbon|hydrogen|solar)_([1-9]|10)$/)
     .refine((v): v is SeedId => true)
 
-const boostTypeSchema = z.string().refine((v): v is BoostType => Object.keys(BOOSTS).includes(v))
+// const createBoostIdSchema = <T extends BoostType | undefined = undefined>(type?: T) => {
+//     if (type) {
+//         const boostIds = getBoostIdsByType(type as BoostType)
+//         return z
+//             .enum(boostIds as [string, ...string[]])
+//             .refine((v): v is BoostId<T & BoostType> => true)
+//     }
 
-const growthTimeReductionBoostTypeSchema = z
-    .enum(['fertilePulse', 'hyperFertility'])
-    .refine((v): v is BoostsByEffect<'growthTimeReduction'> => true)
+//     const allBoostIds = BOOSTS.map(boost => `${boost.type}_${boost.effect}`)
+//     return z.enum(allBoostIds as [string, ...string[]]).refine((v): v is BoostId => true)
+// }
 
-const energyRestoreBoostTypeSchema = z
-    .enum(['energyPack'])
-    .refine((v): v is BoostsByEffect<'energyRestore'> => true)
+const boostIdSchema = z
+    .string()
+    .refine((id): id is BoostId => BOOSTS.some(boost => `${boost.type}_${boost.effect}` === id), {
+        message: 'Invalid boost ID',
+    })
+
+// Для конкретных типов - использует пайп для добавления проверки префикса
+const growthTimeReductionBoostIdSchema = boostIdSchema.pipe(
+    z
+        .string()
+        .startsWith('growthTimeReduction_')
+        .transform(v => v as BoostId<'growthTimeReduction'>)
+)
+
+const energyRestoreBoostIdSchema = boostIdSchema.pipe(
+    z
+        .string()
+        .startsWith('energyRestore_')
+        .transform(v => v as BoostId<'energyRestore'>)
+)
 
 const domeUpgradeTypeSchema = z
     .nativeEnum(DomeUpgradeType)
@@ -57,7 +80,7 @@ export const buySeedsSchema = z.object({
 
 export const buyBoostsSchema = z.object({
     body: z.object({
-        boostType: boostTypeSchema,
+        boostId: boostIdSchema,
         amount: z.number().int().min(1),
     }),
 })
@@ -70,13 +93,23 @@ export const upgradeDomeSchema = z.object({
 
 export const growthTimeReductionBoostSchema = z.object({
     body: z.object({
-        boostType: growthTimeReductionBoostTypeSchema,
+        boostId: growthTimeReductionBoostIdSchema,
         fieldNumber: fieldNumberSchema,
     }),
 })
 
 export const energyRestoreBoostSchema = z.object({
     body: z.object({
-        boostType: energyRestoreBoostTypeSchema,
+        boostId: energyRestoreBoostIdSchema,
     }),
 })
+
+//const boostTypeSchema = z.string().refine((v): v is BoostType => Object.keys(BOOSTS).includes(v))
+
+// const growthTimeReductionBoostIdSchema = z
+//     .enum(getBoostIdsByType('growthTimeReduction') as [string, ...string[]])
+//     .refine((v): v is BoostId<'growthTimeReduction'> => true)
+
+// const energyRestoreBoostIdSchema = z
+//     .enum(getBoostIdsByType('energyRestore') as [string, ...string[]])
+//     .refine((v): v is BoostId<'energyRestore'> => true)

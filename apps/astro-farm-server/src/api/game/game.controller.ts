@@ -56,7 +56,7 @@ export const buyBoosts = async (
 ) => {
     const game = await UseCase.buyBoosts(
         res.locals.walletAddress,
-        req.body.boostType,
+        req.body.boostId,
         req.body.amount
     )
 
@@ -79,7 +79,7 @@ export const useGrowthTimeReductionBoost = async (
     const game = await UseCase.useGrowthTimeReductionBoost(
         res.locals.walletAddress,
         req.body.fieldNumber,
-        req.body.boostType
+        req.body.boostId
     )
     res.send({ ...game.toObject() })
 }
@@ -88,7 +88,7 @@ export const useEnergyRestoreBoost = async (
     req: Request<object, object, EnergyRestoreBoostRequest['body']>,
     res: Response<GameResponse>
 ) => {
-    const game = await UseCase.useEnergyRestoreBoost(res.locals.walletAddress, req.body.boostType)
+    const game = await UseCase.useEnergyRestoreBoost(res.locals.walletAddress, req.body.boostId)
 
     res.send({ ...game.toObject() })
 }

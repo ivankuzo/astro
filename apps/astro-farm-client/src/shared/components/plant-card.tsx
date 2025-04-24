@@ -1,6 +1,13 @@
 import { PropsWithChildren } from 'react'
 import { Typography, Image } from '../ui'
-import { Seed, SeedId, getSeed, getSeedIdBySeed, isSeedUnlocked } from '@astro/astro-farm-game-core'
+import {
+    IGC_NAME,
+    Seed,
+    SeedId,
+    getSeed,
+    getSeedIdBySeed,
+    isSeedUnlocked,
+} from '@astro/astro-farm-game-core'
 import { useGame } from '../hooks/use-game'
 import { InfoIcon } from '../../assets/svg'
 import { Tooltip } from 'react-tooltip'
@@ -20,7 +27,7 @@ const formatGrowthTime = (seconds: number) => {
 
 interface PlantTooltipItemProps {
     title: string
-    value: string
+    value: string | number
     imagePath: string
 }
 
@@ -28,7 +35,7 @@ interface PlantTooltipProps {
     seed: Seed
 }
 
-interface PlantStatItemProps {
+interface PlantStatItemProps extends WithClassName {
     imagePath: string
     value: string | number
 }
@@ -62,7 +69,7 @@ const InfoButton = ({ seedId }: { seedId: SeedId }) => {
 
     return (
         <div
-            className='absolute right-0 top-0 z-30 w-5 cursor-pointer'
+            className='absolute right-0 top-0 z-30 w-4 cursor-pointer'
             data-tooltip-id={isUnlocked ? tooltipId : undefined}
         >
             <InfoIcon />
@@ -70,11 +77,11 @@ const InfoButton = ({ seedId }: { seedId: SeedId }) => {
     )
 }
 
-const PlantStatItem = ({ imagePath, value }: PlantStatItemProps) => {
+const PlantStatItem = ({ imagePath, value, className }: PlantStatItemProps) => {
     return (
-        <div className='flex flex-col items-center'>
-            <Image path={imagePath} />
-            <Typography className='mt-1 text-center text-xs font-bold'>{value}</Typography>
+        <div className={cn('flex flex-col items-center', className)}>
+            <Image path={imagePath} className='w-auto' />
+            <Typography className='mt-1 text-center text-[8px] font-bold'>{value}</Typography>
         </div>
     )
 }
@@ -102,24 +109,29 @@ const PlantTooltip = ({ seed }: PlantTooltipProps) => {
             render={() => (
                 <div className='grid grid-cols-2 gap-2'>
                     <PlantTooltipItem
-                        title='XP Gain'
-                        value={seed.xpGain.toString()}
-                        imagePath='plant-card/xp.png'
-                    />
-                    <PlantTooltipItem
                         title='Growth Time'
                         value={formatGrowthTime(seed.growthTime)}
                         imagePath='plant-card/growth_time.png'
                     />
                     <PlantTooltipItem
-                        title='IGC Yield'
-                        value={seed.igcYield.toString()}
+                        title='Energy Cost'
+                        value={-seed.plantEnergy}
+                        imagePath='plant-card/energy.png'
+                    />
+                    <PlantTooltipItem
+                        title={IGC_NAME}
+                        value={seed.igcYield}
                         imagePath='plant-card/igc.png'
                     />
                     <PlantTooltipItem
-                        title='Energy Cost'
-                        value={(-seed.plantEnergy).toString()}
-                        imagePath='plant-card/energy.png'
+                        title='XP Gain'
+                        value={seed.xpGain}
+                        imagePath='plant-card/xp.png'
+                    />
+                    <PlantTooltipItem
+                        title='Seed Recovery'
+                        value={seed.recoveryRate * 100 + '%'}
+                        imagePath='plant-card/recovery.png'
                     />
                 </div>
             )}
@@ -133,18 +145,14 @@ export const PlantCard = ({ seedId, children, className }: PlantCardProps) => {
     return (
         <div className={cn('rounded-xl border border-[#170062] bg-[#5700FF] p-2', className)}>
             <div className='border-b border-[#D9DAFF] pb-1.5'>
-                <Typography
-                    variant='h1'
-                    className='truncate text-center text-lg font-black'
-                    textStroke='#2500A3'
-                >
+                <Typography variant='h1' className='truncate text-center' textStroke='#2500A3'>
                     {seed.name}
                 </Typography>
             </div>
             <div className='relative mt-2 flex justify-center'>
                 <Image
                     path={`plants/${seed.type}/icons/${seed.type}_${seed.level}.png`}
-                    className='z-20 h-20  w-auto'
+                    className='z-20 h-16  w-auto'
                 />
                 <ImageBackground />
                 <PlantCardCounter seedId={seedId} />
@@ -152,16 +160,54 @@ export const PlantCard = ({ seedId, children, className }: PlantCardProps) => {
                 <PlantTooltip seed={seed} />
             </div>
 
-            <div className='mt-2 grid grid-cols-4 gap-1'>
-                <PlantStatItem imagePath='plant-card/xp.png' value={seed.xpGain} />
-                <PlantStatItem imagePath='plant-card/energy.png' value={-seed.plantEnergy} />
+            {/* <div className='mt-1 grid grid-cols-6 grid-rows-2 gap-2 px-4'>
+                <PlantStatItem
+                    imagePath='plant-card/growth_time.png'
+                    value={formatGrowthTime(seed.growthTime)}
+                    className='col-span-2 col-start-2'
+                />
+
+                <PlantStatItem
+                    imagePath='plant-card/energy.png'
+                    value={-seed.plantEnergy}
+                    className='col-span-2 col-start-4'
+                />
+                <PlantStatItem
+                    imagePath='plant-card/xp.png'
+                    value={seed.xpGain}
+                    className='col-span-2 col-start-1'
+                />
+
+                <PlantStatItem
+                    imagePath='plant-card/igc.png'
+                    value={seed.igcYield}
+                    className='col-span-2 col-start-3'
+                />
+
+                <PlantStatItem
+                    imagePath='plant-card/recovery.png'
+                    value={seed.recoveryRate * 100}
+                    className='col-span-2 col-start-5'
+                />
+            </div> */}
+
+            <div className='mt-1 grid grid-cols-5 gap-1'>
                 <PlantStatItem
                     imagePath='plant-card/growth_time.png'
                     value={formatGrowthTime(seed.growthTime)}
                 />
+
+                <PlantStatItem imagePath='plant-card/energy.png' value={-seed.plantEnergy} />
+                <PlantStatItem imagePath='plant-card/xp.png' value={seed.xpGain} />
+
                 <PlantStatItem imagePath='plant-card/igc.png' value={seed.igcYield} />
+
+                <PlantStatItem
+                    imagePath='plant-card/recovery.png'
+                    value={seed.recoveryRate * 100}
+                />
             </div>
-            {children && <div className='mt-4'>{children}</div>}
+            {children && <div className='mt-2'>{children}</div>}
         </div>
     )
 }

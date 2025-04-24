@@ -11,7 +11,7 @@ export const GameShell = ({ children, className }: PropsWithChildren & WithClass
                 <Header />
             </div>
             <main>{children}</main>
-            <div className={cn('fixed bottom-0 left-0 right-0 z-50')}>
+            <div className={cn('fixed bottom-0 left-0 right-0 z-50 bg-none')}>
                 <Footer />
             </div>
         </div>

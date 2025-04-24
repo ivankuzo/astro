@@ -1,9 +1,7 @@
 import {
-    BoostType,
-    BoostsByEffect,
+    BoostId,
     DomeUpgradeType,
     ENERGY_CAPACITY_LEVELS,
-    FIELD_UNLOCKS,
     FieldNumber,
     GROWTH_SPEED_LEVELS,
     IGC_GAIN_LEVELS,
@@ -116,23 +114,23 @@ export const createGameService = (game: GameDocument) => {
         game.markModified('seedInventory')
     }
 
-    const addBoosts = (boostType: BoostType, amount: number) => {
-        const currentAmount = game.boostInventory[boostType] || 0
-        game.boostInventory[boostType] = currentAmount + amount
+    const addBoosts = (boostId: BoostId, amount: number) => {
+        const currentAmount = game.boostInventory[boostId] || 0
+        game.boostInventory[boostId] = currentAmount + amount
         game.markModified('boostInventory')
     }
 
-    const subBoosts = (boostType: BoostType, amount: number) => {
-        const currentAmount = game.boostInventory[boostType] || 0
+    const subBoosts = (boostId: BoostId, amount: number) => {
+        const currentAmount = game.boostInventory[boostId] || 0
         if (currentAmount < amount) {
             throw new Error('Not enough boosts')
         }
 
         const newAmount = currentAmount - amount
         if (newAmount === 0) {
-            delete game.boostInventory[boostType]
+            delete game.boostInventory[boostId]
         } else {
-            game.boostInventory[boostType] = newAmount
+            game.boostInventory[boostId] = newAmount
         }
         game.markModified('boostInventory')
     }
@@ -164,7 +162,7 @@ export const createGameService = (game: GameDocument) => {
 
     const reduceRemainingGrowthTime = (
         fieldNumber: FieldNumber,
-        boostType: BoostsByEffect<'growthTimeReduction'>
+        boostId: BoostId<'growthTimeReduction'>
     ) => {
         const now = getUnixTime(new Date())
         const field = getOccupiedField(fieldNumber)
@@ -172,10 +170,10 @@ export const createGameService = (game: GameDocument) => {
             throw new Error('Plant is already matured')
         }
 
-        const boost = getBoost(boostType)
+        const boost = getBoost(boostId)
 
         const remainingTime = field.maturedUnix - now
-        const newRemainingTime = remainingTime * boost.effect.value
+        const newRemainingTime = (remainingTime * boost.effect) / 100
         const newMaturedUnix = now + newRemainingTime
 
         field.maturedUnix = newMaturedUnix
@@ -203,13 +201,6 @@ export const createGameService = (game: GameDocument) => {
 
     const upgradeTotalUnlockedFields = () => {
         validateUpgrade(game.dome, DomeUpgradeType.totalUnlockedFields)
-
-        const { levelRequired } = FIELD_UNLOCKS[game.dome.totalUnlockedFields + 1]
-
-        if (getLevel() < levelRequired) {
-            throw new Error('Level is too low')
-        }
-
         game.dome.totalUnlockedFields += 1
     }
 

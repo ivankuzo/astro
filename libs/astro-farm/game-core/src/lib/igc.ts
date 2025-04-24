@@ -3,6 +3,8 @@ export interface igcYieldLevelDetails {
     cost: number
 }
 
+export const IGC_NAME = 'Gbits'
+
 export const IGC_GAIN_LEVELS: Record<number, igcYieldLevelDetails> = {
     1: { bonus: 1, cost: 0 },
     2: { bonus: 1.08, cost: 500 },

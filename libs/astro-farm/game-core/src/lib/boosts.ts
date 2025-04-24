@@ -1,54 +1,75 @@
-export type BoostEffectType = 'growthTimeReduction' | 'energyRestore'
+export type BoostType = 'growthTimeReduction' | 'energyRestore'
 
-export type BoostType = 'fertilePulse' | 'hyperFertility' | 'energyPack'
-
-export interface BoostEffect {
-    type: BoostEffectType
-    value: number
-}
+export type BoostId<T extends BoostType = BoostType> = `${T}_${number}`
 
 export interface Boost {
+    type: BoostType
     name: string
     description: string
-    effect: BoostEffect
+    effect: number
     price: number
 }
+export type BoostInventory = Record<BoostId, number>
 
-export type BoostInventory = Record<BoostType, number>
+export const getBoost = (boostId: BoostId): Boost => {
+    const boost = BOOSTS.find(boost => `${boost.type}_${boost.effect}` === boostId)
+    if (!boost) {
+        throw new Error(`Boost with id ${boostId} not found`)
+    }
+    return boost
+}
 
-export type BoostsByEffect<T extends BoostEffectType> = Extract<
-    BoostType,
-    { [K in BoostType]: (typeof BOOSTS)[K]['effect']['type'] extends T ? K : never }[BoostType]
->
+export const getBoostId = (boost: Boost): BoostId => {
+    return `${boost.type}_${boost.effect}` as BoostId
+}
 
-export const BOOSTS = {
-    fertilePulse: {
+export const getBoostIdsByType = <T extends BoostType>(type: T): BoostId<T>[] => {
+    return BOOSTS.filter(boost => boost.type === type).map(
+        boost => `${boost.type}_${boost.effect}` as BoostId<T>
+    )
+}
+
+export const BOOSTS: Boost[] = [
+    {
+        type: 'growthTimeReduction',
         name: 'Fertile Pulse',
         description: 'Reduces growth time on one planted field (25% of remaining growth time)',
-        effect: {
-            type: 'growthTimeReduction',
-            value: 0.75,
-        },
+        effect: 25,
         price: 100,
     },
-    hyperFertility: {
+    {
+        type: 'growthTimeReduction',
         name: 'Hyper Fertility',
         description: 'Reduces growth time on one planted field (50% of remaining growth time)',
-        effect: {
-            type: 'growthTimeReduction',
-            value: 0.5,
-        },
+        effect: 50,
         price: 250,
     },
-    energyPack: {
-        name: 'Energy Pack',
-        description: 'Restore 100% of energy',
-        effect: {
-            type: 'energyRestore',
-            value: 9999,
-        },
+    {
+        type: 'energyRestore',
+        name: 'Nano Charge',
+        description: 'Restore 50 points of energy',
+        effect: 50,
+        price: 180,
+    },
+    {
+        type: 'energyRestore',
+        name: 'Giga Charge',
+        description: 'Restore 100 points of energy',
+        effect: 100,
         price: 300,
     },
-} as const satisfies Record<BoostType, Boost>
-
-export const getBoost = (type: BoostType): Boost => BOOSTS[type]
+    {
+        type: 'energyRestore',
+        name: 'Energy Pack',
+        description: 'Restore 300 points of energy',
+        effect: 300,
+        price: 850,
+    },
+    {
+        type: 'energyRestore',
+        name: 'Energy Pack',
+        description: 'Restore 600 points of energy',
+        effect: 600,
+        price: 1600,
+    },
+]

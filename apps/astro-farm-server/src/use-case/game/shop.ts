@@ -1,4 +1,4 @@
-import { BoostType, SeedId, getBoost, getSeed } from '@astro/astro-farm-game-core'
+import { BoostId, SeedId, getBoost, getSeed } from '@astro/astro-farm-game-core'
 
 import { createGameService, findGameByWalletAddress } from '../../models/game'
 
@@ -19,13 +19,13 @@ export const buySeeds = async (walletAddress: string, seedId: SeedId, amount: nu
     return game
 }
 
-export const buyBoosts = async (walletAddress: string, boostType: BoostType, amount: number) => {
+export const buyBoosts = async (walletAddress: string, boostId: BoostId, amount: number) => {
     const game = await findGameByWalletAddress(walletAddress)
     const gameService = createGameService(game)
 
-    const boost = getBoost(boostType)
+    const boost = getBoost(boostId)
 
-    gameService.addBoosts(boostType, amount)
+    gameService.addBoosts(boostId, amount)
     gameService.subIgc(boost.price * amount)
 
     await game.save()
