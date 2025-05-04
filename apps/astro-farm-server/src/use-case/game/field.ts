@@ -1,4 +1,9 @@
-import { FieldNumber, SeedId, getSeed, shouldRecoverSeed } from '@astro/astro-farm-game-core'
+import {
+    FieldNumber,
+    SeedId,
+    getUpgradedSeed,
+    shouldRecoverSeed,
+} from '@astro/astro-farm-game-core'
 
 import { createGameService, findGameByWalletAddress } from '../../models/game'
 
@@ -6,7 +11,7 @@ export const plant = async (walletAddress: string, fieldNumber: FieldNumber, see
     const game = await findGameByWalletAddress(walletAddress)
     const gameService = createGameService(game)
 
-    const seed = getSeed(seedId)
+    const seed = getUpgradedSeed(seedId, game)
 
     gameService.subSeeds(seedId, 1)
     gameService.subEnergy(seed.plantEnergy)
@@ -22,7 +27,7 @@ export const harvest = async (walletAddress: string, fieldNumber: FieldNumber) =
 
     const field = gameService.getOccupiedField(fieldNumber)
     const seedId = field.seedId
-    const seed = getSeed(seedId)
+    const seed = getUpgradedSeed(seedId, game)
     const isSeedRecovery = shouldRecoverSeed(seedId)
 
     if (isSeedRecovery) {

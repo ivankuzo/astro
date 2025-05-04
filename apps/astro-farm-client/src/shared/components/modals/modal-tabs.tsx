@@ -1,24 +1,35 @@
 import { useState } from 'react'
-import { cn } from '@astro/client-cn'
+import { cn, WithClassName } from '@astro/client-cn'
 import { Typography } from '../../ui/typography'
-import { ModalBase, ContentContainer } from './modal-base'
+import { ModalBase } from './modal-base'
 
-interface ModalTabsProps {
+interface ModalTabsProps extends WithClassName {
     title?: string
     tabs: TabPanelProps['tabs']
     activeTab?: string
     onTabChange?: (tabId: string) => void
 }
 
-export const ModalTabs = ({ title = '', tabs, activeTab, onTabChange }: ModalTabsProps) => {
+export const ModalTabs = ({
+    title = '',
+    tabs,
+    activeTab,
+    onTabChange,
+    className,
+}: ModalTabsProps) => {
     return (
         <ModalBase title={title}>
-            <TabPanel tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
+            <TabPanel
+                tabs={tabs}
+                activeTab={activeTab}
+                onTabChange={onTabChange}
+                className={className}
+            />
         </ModalBase>
     )
 }
 
-interface TabPanelProps {
+interface TabPanelProps extends WithClassName {
     tabs: {
         id: string
         label: string | React.ReactNode
@@ -28,7 +39,12 @@ interface TabPanelProps {
     onTabChange?: (tabId: string) => void
 }
 
-export const TabPanel = ({ tabs, activeTab: controlledActiveTab, onTabChange }: TabPanelProps) => {
+export const TabPanel = ({
+    tabs,
+    activeTab: controlledActiveTab,
+    onTabChange,
+    className,
+}: TabPanelProps) => {
     const [internalActiveTab, setInternalActiveTab] = useState(tabs[0].id)
     const activeTab = controlledActiveTab || internalActiveTab
 
@@ -65,9 +81,13 @@ export const TabPanel = ({ tabs, activeTab: controlledActiveTab, onTabChange }: 
                 ))}
             </div>
 
-            <ContentContainer className='rounded-b-3xl rounded-t-none px-2 py-4 shadow-[inset_0px_-3px_0.5px_rgba(128,0,191,0.8)]'>
-                {tabs.find(tab => tab.id === activeTab)?.content}
-            </ContentContainer>
+            <div className='rounded-b-3xl rounded-t-none bg-[#B010FF] px-2 py-4 shadow-[inset_0px_-3px_0.5px_rgba(128,0,191,0.8)]'>
+                <div className={cn('max-h-[500px] overflow-y-scroll', className)}>
+                    {tabs.map(tab => tab.id === activeTab && <div key={tab.id}>{tab.content}</div>)}
+                </div>
+            </div>
         </div>
     )
 }
+
+//rounded-b-3xl rounded-t-none px-2 py-4 shadow-[inset_0px_-3px_0.5px_rgba(128,0,191,0.8)]

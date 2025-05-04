@@ -7,8 +7,8 @@ import {
     HarvestRequest,
     PlantRequest,
     UpgradeDomeRequest,
-    EnergyRestoreBoostRequest,
-    GrowthTimeReductionBoostRequest,
+    EnergyBoostRequest,
+    GrowthTimeBoostRequest,
 } from '@astro/astro-farm-api-contracts'
 
 import * as UseCase from '../../use-case'
@@ -72,11 +72,11 @@ export const upgradeDome = async (
     res.send({ ...game.toObject() })
 }
 
-export const useGrowthTimeReductionBoost = async (
-    req: Request<object, object, GrowthTimeReductionBoostRequest['body']>,
+export const useGrowthTimeBoost = async (
+    req: Request<object, object, GrowthTimeBoostRequest['body']>,
     res: Response<GameResponse>
 ) => {
-    const game = await UseCase.useGrowthTimeReductionBoost(
+    const game = await UseCase.useGrowthTimeBoost(
         res.locals.walletAddress,
         req.body.fieldNumber,
         req.body.boostId
@@ -84,11 +84,11 @@ export const useGrowthTimeReductionBoost = async (
     res.send({ ...game.toObject() })
 }
 
-export const useEnergyRestoreBoost = async (
-    req: Request<object, object, EnergyRestoreBoostRequest['body']>,
+export const useEnergyBoost = async (
+    req: Request<object, object, EnergyBoostRequest['body']>,
     res: Response<GameResponse>
 ) => {
-    const game = await UseCase.useEnergyRestoreBoost(res.locals.walletAddress, req.body.boostId)
+    const game = await UseCase.useEnergyBoost(res.locals.walletAddress, req.body.boostId)
 
     res.send({ ...game.toObject() })
 }

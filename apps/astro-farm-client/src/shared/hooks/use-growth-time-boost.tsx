@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { growthTimeReductionBoost } from '../api/game'
+import { growthTimeBoost } from '../api/game'
 
-export const useGrowthTimeReduction = () => {
+export const useGrowthTimeBoost = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: growthTimeReductionBoost,
+        mutationFn: growthTimeBoost,
         onSuccess: data => {
             queryClient.setQueryData(['auth', 'game'], data)
         },

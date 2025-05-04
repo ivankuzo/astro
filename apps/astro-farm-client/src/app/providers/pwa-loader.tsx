@@ -6,7 +6,6 @@ import { ErrorScreen } from '../../shared/components/error-screen'
 export const PwaLoader = ({ children }: PropsWithChildren) => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<Error | null>(null)
-    const [minLoadingComplete, setMinLoadingComplete] = useState(false)
 
     const { offlineReady, needRefresh, updateServiceWorker } = useRegisterSW({
         onOfflineReady() {
@@ -18,14 +17,6 @@ export const PwaLoader = ({ children }: PropsWithChildren) => {
             setLoading(false)
         },
     })
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setMinLoadingComplete(true)
-        }, 2000)
-
-        return () => clearTimeout(timer)
-    }, [])
 
     useEffect(() => {
         if (needRefresh) {
@@ -44,7 +35,7 @@ export const PwaLoader = ({ children }: PropsWithChildren) => {
         }
     }, [loading, offlineReady])
 
-    if ((loading && !offlineReady) || !minLoadingComplete) {
+    if (loading && !offlineReady) {
         return <LoadingScreen />
     }
 

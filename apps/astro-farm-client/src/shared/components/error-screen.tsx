@@ -1,10 +1,9 @@
-import { ContentLayout } from '../../layouts/content'
 import { Typography } from '../ui'
 
 export const ErrorScreen = ({ error }: { error: Error }) => {
     return (
-        <ContentLayout className='flex items-center justify-center bg-[#4B009A]'>
+        <div className='flex h-screen items-center justify-center bg-[#4B009A] px-4'>
             <Typography textStroke='black'>{error.message}</Typography>
-        </ContentLayout>
+        </div>
     )
 }

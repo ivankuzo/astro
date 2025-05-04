@@ -1,18 +1,30 @@
 import { ReactNode } from 'react'
-import { ModalBase, ContentContainer } from './modal-base'
+import { ModalBase } from './modal-base'
 import { Image } from '../../ui/image'
+import { cn, WithClassName } from '@astro/client-cn'
 
-interface ModalWithImageProps {
+interface ModalWithImageProps extends WithClassName {
     children: ReactNode
     title?: string
     button?: ReactNode
     imagePath: string
 }
 
-export function ModalWithImage({ title, imagePath, children, button }: ModalWithImageProps) {
+export function ModalWithImage({
+    title,
+    imagePath,
+    children,
+    button,
+    className,
+}: ModalWithImageProps) {
     return (
         <ModalBase title={title} button={button}>
-            <ContentContainer>
+            <div
+                className={cn(
+                    'rounded-3xl bg-[#B010FF] p-4 shadow-[inset_0px_-3px_0.5px_rgba(128,0,191,0.8),inset_0px_1.5px_1px_#D684FF]',
+                    className
+                )}
+            >
                 <div className='flex flex-row items-center gap-4'>
                     <div className='relative flex-shrink-0 pl-4'>
                         <ImageBackground />
@@ -20,7 +32,7 @@ export function ModalWithImage({ title, imagePath, children, button }: ModalWith
                     </div>
                     <div className='flex-grow'>{children}</div>
                 </div>
-            </ContentContainer>
+            </div>
         </ModalBase>
     )
 }

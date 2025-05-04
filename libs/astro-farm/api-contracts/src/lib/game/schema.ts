@@ -40,18 +40,18 @@ const boostIdSchema = z
     })
 
 // Для конкретных типов - использует пайп для добавления проверки префикса
-const growthTimeReductionBoostIdSchema = boostIdSchema.pipe(
+const growthTimeBoostIdSchema = boostIdSchema.pipe(
     z
         .string()
-        .startsWith('growthTimeReduction_')
-        .transform(v => v as BoostId<'growthTimeReduction'>)
+        .startsWith('growthTime_')
+        .transform(v => v as BoostId<'growthTime'>)
 )
 
-const energyRestoreBoostIdSchema = boostIdSchema.pipe(
+const energyBoostIdSchema = boostIdSchema.pipe(
     z
         .string()
-        .startsWith('energyRestore_')
-        .transform(v => v as BoostId<'energyRestore'>)
+        .startsWith('energy_')
+        .transform(v => v as BoostId<'energy'>)
 )
 
 const domeUpgradeTypeSchema = z
@@ -91,25 +91,25 @@ export const upgradeDomeSchema = z.object({
     }),
 })
 
-export const growthTimeReductionBoostSchema = z.object({
+export const growthTimeBoostSchema = z.object({
     body: z.object({
-        boostId: growthTimeReductionBoostIdSchema,
+        boostId: growthTimeBoostIdSchema,
         fieldNumber: fieldNumberSchema,
     }),
 })
 
-export const energyRestoreBoostSchema = z.object({
+export const energyBoostSchema = z.object({
     body: z.object({
-        boostId: energyRestoreBoostIdSchema,
+        boostId: energyBoostIdSchema,
     }),
 })
 
 //const boostTypeSchema = z.string().refine((v): v is BoostType => Object.keys(BOOSTS).includes(v))
 
-// const growthTimeReductionBoostIdSchema = z
-//     .enum(getBoostIdsByType('growthTimeReduction') as [string, ...string[]])
-//     .refine((v): v is BoostId<'growthTimeReduction'> => true)
+// const growthTimeBoostIdSchema = z
+//     .enum(getBoostIdsByType('growthTime') as [string, ...string[]])
+//     .refine((v): v is BoostId<'growthTime'> => true)
 
-// const energyRestoreBoostIdSchema = z
-//     .enum(getBoostIdsByType('energyRestore') as [string, ...string[]])
-//     .refine((v): v is BoostId<'energyRestore'> => true)
+// const energyBoostIdSchema = z
+//     .enum(getBoostIdsByType('energy') as [string, ...string[]])
+//     .refine((v): v is BoostId<'energy'> => true)

@@ -1,33 +1,33 @@
 import NiceModal from '@ebay/nice-modal-react'
-import { BoostsByEffect, FieldNumber } from '@astro/astro-farm-game-core'
-import { BOOSTS, BoostType } from '@astro/astro-farm-game-core'
+import { getBoost, BoostId, FieldNumber } from '@astro/astro-farm-game-core'
+
 import { BoostCard } from '../../shared/components/boost-card'
 import { Modal } from '../../shared/components/modals'
 import { Button } from '../../shared/ui/button'
 
-import { useGrowthTimeReduction } from '../../shared/hooks'
-
+import { useGame, useGrowthTimeBoost } from '../../shared/hooks'
+import { Typography } from '../../shared/ui'
 const BoostCardChoose = ({
-    boostType,
+    boostId,
     fieldNumber,
 }: {
-    boostType: BoostsByEffect<'growthTimeReduction'>
+    boostId: BoostId<'growthTime'>
     fieldNumber: FieldNumber
 }) => {
-    const boostMutation = useGrowthTimeReduction()
+    const boostMutation = useGrowthTimeBoost()
 
     const handle = async () => {
         await boostMutation.mutateAsync({
             body: {
                 fieldNumber,
-                boostType,
+                boostId,
             },
         })
         NiceModal.hide(BoostPlantModal)
     }
 
     return (
-        <BoostCard boostType={boostType}>
+        <BoostCard boost={getBoost(boostId)}>
             <Button variant='orange' onClick={handle} disabled={boostMutation.isPending}>
                 Choose
             </Button>
@@ -35,21 +35,30 @@ const BoostCardChoose = ({
     )
 }
 export const BoostPlantModal = NiceModal.create(({ fieldNumber }: { fieldNumber: FieldNumber }) => {
-    const growthTimeReductionBoosts = Object.keys(BOOSTS).filter(
-        boostType => BOOSTS[boostType as BoostType].effect.type === 'growthTimeReduction'
-    ) as BoostsByEffect<'growthTimeReduction'>[]
+    const { data: game } = useGame()
+    const boostInventory = game?.boostInventory
+    if (!boostInventory) return null
 
+    const growthTimeBoostIds = Object.keys(boostInventory)
+        .filter(boostId => boostInventory[boostId as BoostId] > 0)
+        .filter(boostId => boostId.startsWith('growthTime_')) as BoostId<'growthTime'>[]
     return (
-        <Modal title='CHOOSE A BOOST'>
-            <div className='space-y-4'>
-                {growthTimeReductionBoosts.map(boostType => (
-                    <BoostCardChoose
-                        key={boostType}
-                        boostType={boostType}
-                        fieldNumber={fieldNumber}
-                    />
-                ))}
-            </div>
+        <Modal title='CHOOSE A BOOST' className='h-[40vh] sm:h-[400px]'>
+            {growthTimeBoostIds.length > 0 ? (
+                <div className='space-y-4'>
+                    {growthTimeBoostIds.map(boostId => (
+                        <BoostCardChoose
+                            key={boostId}
+                            boostId={boostId}
+                            fieldNumber={fieldNumber}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className='mt-4 text-center'>
+                    <Typography textStroke='black'>No growth time boosts available</Typography>
+                </div>
+            )}
         </Modal>
     )
 })

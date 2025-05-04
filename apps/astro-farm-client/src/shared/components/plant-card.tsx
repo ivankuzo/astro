@@ -5,25 +5,14 @@ import {
     Seed,
     SeedId,
     getSeed,
-    getSeedIdBySeed,
+    getUpgradedSeed,
     isSeedUnlocked,
 } from '@astro/astro-farm-game-core'
 import { useGame } from '../hooks/use-game'
 import { InfoIcon } from '../../assets/svg'
-import { Tooltip } from 'react-tooltip'
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { cn, WithClassName } from '@astro/client-cn'
-
-const formatGrowthTime = (seconds: number) => {
-    if (seconds < 60) {
-        return `${seconds}s`
-    } else if (seconds < 3600) {
-        return `${Math.floor(seconds / 60)}m`
-    } else if (seconds < 86400) {
-        return `${Math.floor(seconds / 3600)}h`
-    } else {
-        return `${Math.floor(seconds / 86400)}d`
-    }
-}
+import { formatTime } from '../utils/formatters'
 
 interface PlantTooltipItemProps {
     title: string
@@ -35,10 +24,10 @@ interface PlantTooltipProps {
     seed: Seed
 }
 
-interface PlantStatItemProps extends WithClassName {
-    imagePath: string
-    value: string | number
-}
+// interface PlantStatItemProps extends WithClassName {
+//     imagePath: string
+//     value: string | number
+// }
 
 interface PlantCardProps extends PropsWithChildren, WithClassName {
     seedId: SeedId
@@ -62,29 +51,33 @@ const PlantCardCounter = ({ seedId }: { seedId: SeedId }) => {
 }
 
 const InfoButton = ({ seedId }: { seedId: SeedId }) => {
-    const tooltipId = `plant-info-tooltip-${seedId}`
     const { data: game } = useGame()
     if (!game) return null
     const isUnlocked = isSeedUnlocked(seedId, game.xp)
 
+    if (!isUnlocked) {
+        return (
+            <div className='absolute right-0 top-0 z-30 w-4 cursor-pointer'>
+                <InfoIcon />
+            </div>
+        )
+    }
+
     return (
-        <div
-            className='absolute right-0 top-0 z-30 w-4 cursor-pointer'
-            data-tooltip-id={isUnlocked ? tooltipId : undefined}
-        >
+        <PopoverButton className='absolute right-0 top-0 z-30 w-4 cursor-pointer focus:outline-none'>
             <InfoIcon />
-        </div>
+        </PopoverButton>
     )
 }
 
-const PlantStatItem = ({ imagePath, value, className }: PlantStatItemProps) => {
-    return (
-        <div className={cn('flex flex-col items-center', className)}>
-            <Image path={imagePath} className='w-auto' />
-            <Typography className='mt-1 text-center text-[8px] font-bold'>{value}</Typography>
-        </div>
-    )
-}
+// const PlantStatItem = ({ imagePath, value, className }: PlantStatItemProps) => {
+//     return (
+//         <div className={cn('flex flex-col items-center', className)}>
+//             <Image path={imagePath} className='w-auto' />
+//             <Typography className='mt-1 text-center text-[11px] font-bold'>{value}</Typography>
+//         </div>
+//     )
+// }
 
 const PlantTooltipItem = ({ title, value, imagePath }: PlantTooltipItemProps) => {
     return (
@@ -99,71 +92,75 @@ const PlantTooltipItem = ({ title, value, imagePath }: PlantTooltipItemProps) =>
 }
 
 const PlantTooltip = ({ seed }: PlantTooltipProps) => {
-    const tooltipId = `plant-info-tooltip-${getSeedIdBySeed(seed)}`
-
     return (
-        <Tooltip
-            id={tooltipId}
-            className='!z-[100] !rounded-xl !bg-[#E7E7FF] !opacity-100 !shadow-[0px_1px_1px_rgba(22,5,129,0.7),inset_0px_-2px_0.5px_rgba(175,165,218,0.8)]'
-            place='bottom'
-            render={() => (
-                <div className='grid grid-cols-2 gap-2'>
-                    <PlantTooltipItem
-                        title='Growth Time'
-                        value={formatGrowthTime(seed.growthTime)}
-                        imagePath='plant-card/growth_time.png'
-                    />
-                    <PlantTooltipItem
-                        title='Energy Cost'
-                        value={-seed.plantEnergy}
-                        imagePath='plant-card/energy.png'
-                    />
-                    <PlantTooltipItem
-                        title={IGC_NAME}
-                        value={seed.igcYield}
-                        imagePath='plant-card/igc.png'
-                    />
-                    <PlantTooltipItem
-                        title='XP Gain'
-                        value={seed.xpGain}
-                        imagePath='plant-card/xp.png'
-                    />
-                    <PlantTooltipItem
-                        title='Seed Recovery'
-                        value={seed.recoveryRate * 100 + '%'}
-                        imagePath='plant-card/recovery.png'
-                    />
-                </div>
-            )}
-        />
+        <PopoverPanel
+            anchor={{
+                to: 'bottom',
+                gap: 8,
+                padding: 8,
+            }}
+            className='rounded-xl bg-[#E7E7FF] shadow-[0px_1px_1px_rgba(22,5,129,0.7),inset_0px_-2px_0.5px_rgba(175,165,218,0.8)]'
+        >
+            <div className='grid grid-cols-2 gap-2 p-2'>
+                <PlantTooltipItem
+                    title='Growth Time'
+                    value={formatTime(seed.growthTime)}
+                    imagePath='plant-card/growth_time.png'
+                />
+                <PlantTooltipItem
+                    title='Energy Cost'
+                    value={-seed.plantEnergy}
+                    imagePath='plant-card/energy.png'
+                />
+                <PlantTooltipItem
+                    title={IGC_NAME}
+                    value={seed.igcYield}
+                    imagePath='plant-card/igc.png'
+                />
+                <PlantTooltipItem
+                    title='XP Gain'
+                    value={seed.xpGain}
+                    imagePath='plant-card/xp.png'
+                />
+                <PlantTooltipItem
+                    title='Seed Recovery'
+                    value={seed.recoveryRate * 100 + '%'}
+                    imagePath='plant-card/recovery.png'
+                />
+            </div>
+        </PopoverPanel>
     )
 }
 
 export const PlantCard = ({ seedId, children, className }: PlantCardProps) => {
-    const seed = getSeed(seedId)
+    const { data: game } = useGame()
+    if (!game) return null
+    const seed = getUpgradedSeed(seedId, game)
 
     return (
-        <div className={cn('rounded-xl border border-[#170062] bg-[#5700FF] p-2', className)}>
+        <div className={cn('rounded-xl border border-[#170062] bg-[#5700FF] p-1', className)}>
             <div className='border-b border-[#D9DAFF] pb-1.5'>
                 <Typography variant='h1' className='truncate text-center' textStroke='#2500A3'>
                     {seed.name}
                 </Typography>
             </div>
-            <div className='relative mt-2 flex justify-center'>
+            <div className='relative my-2 flex justify-center'>
                 <Image
                     path={`plants/${seed.type}/icons/${seed.type}_${seed.level}.png`}
-                    className='z-20 h-16  w-auto'
+                    className='z-20 h-16 w-auto'
                 />
                 <ImageBackground />
                 <PlantCardCounter seedId={seedId} />
-                <InfoButton seedId={seedId} />
-                <PlantTooltip seed={seed} />
+                <Popover>
+                    <InfoButton seedId={seedId} />
+                    <PlantTooltip seed={seed} />
+                </Popover>
             </div>
 
-            {/* <div className='mt-1 grid grid-cols-6 grid-rows-2 gap-2 px-4'>
+            {/* <div className='mt-2 grid grid-cols-6 grid-rows-2 gap-2 px-2'>
                 <PlantStatItem
                     imagePath='plant-card/growth_time.png'
-                    value={formatGrowthTime(seed.growthTime)}
+                    value={formatTime(seed.growthTime)}
                     className='col-span-2 col-start-2'
                 />
 
@@ -191,22 +188,6 @@ export const PlantCard = ({ seedId, children, className }: PlantCardProps) => {
                 />
             </div> */}
 
-            <div className='mt-1 grid grid-cols-5 gap-1'>
-                <PlantStatItem
-                    imagePath='plant-card/growth_time.png'
-                    value={formatGrowthTime(seed.growthTime)}
-                />
-
-                <PlantStatItem imagePath='plant-card/energy.png' value={-seed.plantEnergy} />
-                <PlantStatItem imagePath='plant-card/xp.png' value={seed.xpGain} />
-
-                <PlantStatItem imagePath='plant-card/igc.png' value={seed.igcYield} />
-
-                <PlantStatItem
-                    imagePath='plant-card/recovery.png'
-                    value={seed.recoveryRate * 100}
-                />
-            </div>
             {children && <div className='mt-2'>{children}</div>}
         </div>
     )

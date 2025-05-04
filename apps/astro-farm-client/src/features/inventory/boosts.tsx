@@ -3,16 +3,17 @@ import { BoostInventory, BoostId, getBoost } from '@astro/astro-farm-game-core'
 import { BoostCard } from '../../shared/components/boost-card'
 
 import { useGame } from '../../shared/hooks/use-game'
-import { useEnergyRestoreBoost } from '../../shared/hooks'
+import { useEnergyBoost } from '../../shared/hooks'
 import { Button } from '../../shared/ui/button'
 import { InventoryModal } from './inventory-modal'
 import NiceModal from '@ebay/nice-modal-react'
+import { Typography } from '../../shared/ui'
 
-const InventoryEnergyBoostCard = ({ boostId }: { boostId: BoostId<'energyRestore'> }) => {
-    const energyRestoreBoostMutation = useEnergyRestoreBoost()
+export const InventoryEnergyBoostCard = ({ boostId }: { boostId: BoostId<'energy'> }) => {
+    const energyBoostMutation = useEnergyBoost()
 
     const handle = async () => {
-        await energyRestoreBoostMutation.mutateAsync({
+        await energyBoostMutation.mutateAsync({
             body: {
                 boostId,
             },
@@ -26,7 +27,7 @@ const InventoryEnergyBoostCard = ({ boostId }: { boostId: BoostId<'energyRestore
                 variant='orange'
                 size='sm'
                 onClick={handle}
-                disabled={energyRestoreBoostMutation.isPending}
+                disabled={energyBoostMutation.isPending}
             >
                 Apply
             </Button>
@@ -34,11 +35,7 @@ const InventoryEnergyBoostCard = ({ boostId }: { boostId: BoostId<'energyRestore
     )
 }
 
-const InventoryGrowthTimeReductionBoostCard = ({
-    boostId,
-}: {
-    boostId: BoostId<'growthTimeReduction'>
-}) => {
+export const InventoryGrowthTimeBoostCard = ({ boostId }: { boostId: BoostId<'growthTime'> }) => {
     const handle = async () => {
         await NiceModal.hide(InventoryModal)
     }
@@ -61,21 +58,28 @@ export const InventoryBoosts = () => {
         boostId => boostInventory[boostId as BoostId] > 0
     )
 
-    const growthTimeReductionBoostIds = availableBoostIds.filter(boostId =>
-        boostId.startsWith('growthTimeReduction_')
-    ) as BoostId<'growthTimeReduction'>[]
+    const growthTimeBoostIds = availableBoostIds.filter(boostId =>
+        boostId.startsWith('growthTime_')
+    ) as BoostId<'growthTime'>[]
 
-    const energyRestoreBoostIds = availableBoostIds.filter(boostId =>
-        boostId.startsWith('energyRestore_')
-    ) as BoostId<'energyRestore'>[]
+    const energyBoostIds = availableBoostIds.filter(boostId =>
+        boostId.startsWith('energy_')
+    ) as BoostId<'energy'>[]
+
+    if (energyBoostIds.length === 0 && growthTimeBoostIds.length === 0)
+        return (
+            <div className='mt-4 text-center'>
+                <Typography textStroke='black'>No boosts available</Typography>
+            </div>
+        )
 
     return (
         <div className='space-y-4'>
-            {energyRestoreBoostIds.map(boostId => (
+            {energyBoostIds.map(boostId => (
                 <InventoryEnergyBoostCard key={boostId} boostId={boostId} />
             ))}
-            {growthTimeReductionBoostIds.map(boostId => (
-                <InventoryGrowthTimeReductionBoostCard key={boostId} boostId={boostId} />
+            {growthTimeBoostIds.map(boostId => (
+                <InventoryGrowthTimeBoostCard key={boostId} boostId={boostId} />
             ))}
         </div>
     )

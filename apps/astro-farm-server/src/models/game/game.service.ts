@@ -3,15 +3,12 @@ import {
     DomeUpgradeType,
     ENERGY_CAPACITY_LEVELS,
     FieldNumber,
-    GROWTH_SPEED_LEVELS,
-    IGC_GAIN_LEVELS,
     SeedId,
     TOTAL_FIELDS,
-    XP_GAIN_LEVELS,
     calculateCurrentEnergy,
     getBoost,
     getLevelByXp,
-    getSeed,
+    getUpgradedSeed,
     validateUpgrade,
 } from '@astro/astro-farm-game-core'
 
@@ -25,7 +22,7 @@ export const createGameService = (game: GameDocument) => {
     }
 
     const getCurrentEnergy = () => {
-        return calculateCurrentEnergy(game.energy, getLevel(), game.dome.energyCapacity)
+        return calculateCurrentEnergy(game)
     }
 
     const getField = (fieldNumber: FieldNumber) => {
@@ -82,15 +79,11 @@ export const createGameService = (game: GameDocument) => {
     }
 
     const addIgc = (amount: number) => {
-        const bonus = IGC_GAIN_LEVELS[game.dome.igcYield].bonus
-        const igcToAdd = amount * bonus
-        game.igc += igcToAdd
+        game.igc += amount
     }
 
-    const addXp = (amount: number, applyBoost = true) => {
-        const boost = applyBoost ? XP_GAIN_LEVELS[game.dome.xpGain].boost : 1
-        const xpToAdd = amount * boost
-        game.xp += xpToAdd
+    const addXp = (amount: number) => {
+        game.xp += amount
     }
 
     const addSeeds = (seedId: SeedId, amount: number) => {
@@ -139,9 +132,8 @@ export const createGameService = (game: GameDocument) => {
         const now = getUnixTime(new Date())
         getEmptyField(fieldNumber)
 
-        const seed = getSeed(seedId)
-        const { bonus } = GROWTH_SPEED_LEVELS[game.dome.growthSpeed]
-        const maturedUnix = now + seed.growthTime * bonus
+        const seed = getUpgradedSeed(seedId, game)
+        const maturedUnix = now + seed.growthTime
 
         game.fields[fieldNumber] = {
             seedId,
@@ -162,7 +154,7 @@ export const createGameService = (game: GameDocument) => {
 
     const reduceRemainingGrowthTime = (
         fieldNumber: FieldNumber,
-        boostId: BoostId<'growthTimeReduction'>
+        boostId: BoostId<'growthTime'>
     ) => {
         const now = getUnixTime(new Date())
         const field = getOccupiedField(fieldNumber)
@@ -173,7 +165,7 @@ export const createGameService = (game: GameDocument) => {
         const boost = getBoost(boostId)
 
         const remainingTime = field.maturedUnix - now
-        const newRemainingTime = (remainingTime * boost.effect) / 100
+        const newRemainingTime = remainingTime - (remainingTime * boost.effect) / 100
         const newMaturedUnix = now + newRemainingTime
 
         field.maturedUnix = newMaturedUnix

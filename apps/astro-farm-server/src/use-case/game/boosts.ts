@@ -2,10 +2,10 @@ import { BoostId, FieldNumber, getBoost } from '@astro/astro-farm-game-core'
 
 import { createGameService, findGameByWalletAddress } from '../../models/game'
 
-export const useGrowthTimeReductionBoost = async (
+export const useGrowthTimeBoost = async (
     walletAddress: string,
     fieldNumber: FieldNumber,
-    boostId: BoostId<'growthTimeReduction'>
+    boostId: BoostId<'growthTime'>
 ) => {
     const game = await findGameByWalletAddress(walletAddress)
     const gameService = createGameService(game)
@@ -17,10 +17,7 @@ export const useGrowthTimeReductionBoost = async (
     return game
 }
 
-export const useEnergyRestoreBoost = async (
-    walletAddress: string,
-    boostId: BoostId<'energyRestore'>
-) => {
+export const useEnergyBoost = async (walletAddress: string, boostId: BoostId<'energy'>) => {
     const game = await findGameByWalletAddress(walletAddress)
     const gameService = createGameService(game)
 

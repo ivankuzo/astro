@@ -12,6 +12,7 @@ import { useIsMature } from './use-is-mature'
 import { MatureFieldTooltip } from './mature-field-tooltip'
 import { ImmatureFieldTooltip } from './immature-field-tooltip'
 import { LockedFieldModal } from './locked-field-modal'
+import { Popover, PopoverButton } from '@headlessui/react'
 
 interface OccupiedFieldProps {
     fieldNumber: FieldNumber
@@ -52,34 +53,37 @@ const OccupiedField = ({ fieldNumber, field }: OccupiedFieldProps) => {
 }
 
 const ImmatureField = ({ fieldNumber, field }: OccupiedFieldProps) => {
-    const tooltipId = `immature-field-tooltip-${fieldNumber}`
     const seed = getSeed(field.seedId)
 
     return (
-        <>
-            <Image path='field.png' className='w-full' data-tooltip-id={tooltipId} />
+        <Popover>
+            <PopoverButton>
+                <Image path='field.png' className='w-full' />
+            </PopoverButton>
             <Image
                 path={`plants/${seed.type}/planted/${seed.type}_${seed.level}.png`}
                 className='pointer-events-none absolute bottom-0 left-0 w-full'
             />
-            <ImmatureFieldTooltip fieldNumber={fieldNumber} field={field} tooltipId={tooltipId} />
-        </>
+            <ImmatureFieldTooltip fieldNumber={fieldNumber} field={field} />
+        </Popover>
     )
 }
 
 const MatureField = ({ fieldNumber, field }: OccupiedFieldProps) => {
-    const tooltipId = `mature-field-tooltip-${fieldNumber}`
     const seed = getSeed(field.seedId)
 
     return (
-        <>
-            <Image path='field.png' className='w-full' data-tooltip-id={tooltipId} />
+        <Popover>
+            <PopoverButton>
+                <Image path='field.png' className='w-full' />
+            </PopoverButton>
             <Image
                 path={`plants/${seed.type}/mature/${seed.type}_${seed.level}.png`}
                 className='pointer-events-none absolute bottom-0 left-0 w-full'
             />
-            <MatureFieldTooltip fieldNumber={fieldNumber} field={field} tooltipId={tooltipId} />
-        </>
+
+            <MatureFieldTooltip fieldNumber={fieldNumber} field={field} />
+        </Popover>
     )
 }
 

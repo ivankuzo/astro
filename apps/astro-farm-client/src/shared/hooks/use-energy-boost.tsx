@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { energyRestoreBoost } from '../api/game'
+import { energyBoost } from '../api/game'
 
-export const useEnergyRestoreBoost = () => {
+export const useEnergyBoost = () => {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: energyRestoreBoost,
+        mutationFn: energyBoost,
         onSuccess: data => {
             queryClient.setQueryData(['auth', 'game'], data)
         },

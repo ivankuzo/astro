@@ -1,16 +1,19 @@
 import { ReactNode } from 'react'
-import { ModalBase, ContentContainer } from './modal-base'
+import { ModalBase } from './modal-base'
+import { cn, WithClassName } from '@astro/client-cn'
 
-interface ModalProps {
+interface ModalProps extends WithClassName {
     children: ReactNode
     title?: string
     button?: ReactNode
 }
 
-export function Modal({ children, title = '', button }: ModalProps) {
+export function Modal({ children, title = '', button, className }: ModalProps) {
     return (
         <ModalBase title={title} button={button}>
-            <ContentContainer>{children}</ContentContainer>
+            <div className='rounded-3xl bg-[#B010FF] p-4 shadow-[inset_0px_-3px_0.5px_rgba(128,0,191,0.8),inset_0px_1.5px_1px_#D684FF]'>
+                <div className={cn('max-h-[500px] overflow-y-scroll', className)}>{children}</div>
+            </div>
         </ModalBase>
     )
 }

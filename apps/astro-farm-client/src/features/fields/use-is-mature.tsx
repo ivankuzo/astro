@@ -4,17 +4,19 @@ import { useGame } from '../../shared/hooks'
 import { getUnixTime } from 'date-fns'
 
 export const useIsMature = (fieldNumber: FieldNumber) => {
-    const { data: game, isLoading } = useGame()
-    const [isMature, setIsMature] = useState<boolean | null>(null)
+    const { data: game } = useGame()
+
+    const field = game!.fields[fieldNumber]
+    const initialIsMature = field ? getUnixTime(new Date()) >= field.maturedUnix : false
+
+    const [isMature, setIsMature] = useState(initialIsMature)
 
     useEffect(() => {
-        if (!game) return
-
         const updateMaturity = () => {
-            const field = game.fields[fieldNumber]
+            const field = game!.fields[fieldNumber]
 
             if (!field) {
-                setIsMature(null)
+                setIsMature(false)
                 return
             }
 
@@ -31,6 +33,5 @@ export const useIsMature = (fieldNumber: FieldNumber) => {
 
     return {
         isMature,
-        isLoading,
     }
 }

@@ -2,7 +2,7 @@ import { canUpgrade, DomeUpgradeType, getUpgradeCost } from '@astro/astro-farm-g
 
 import { Typography } from '../../shared/ui/typography'
 import { useGame } from '../../shared/hooks/use-game'
-import { getImagePath, getUpgradeTitle, getUpgradeValues } from './utils'
+import { getIconImagePath, getUpgradeTitle, getUpgradeValues } from './utils'
 import { getName } from './utils'
 import { Image } from '../../shared/ui/image'
 import { cn } from '@astro/client-cn'
@@ -16,10 +16,10 @@ const UpgradeHeader = ({ isMax, title }: { isMax: boolean; title: string }) => {
         <div
             className={cn(
                 'absolute left-0 right-0 top-0',
-                'flex h-[40px]',
+                'flex h-[30px]',
                 'items-center justify-center',
                 'gap-2',
-                'font-bold',
+                'text-sm font-bold',
                 isMax ? 'bg-[#009AD6]' : 'bg-[#9800DE]'
             )}
         >
@@ -30,8 +30,8 @@ const UpgradeHeader = ({ isMax, title }: { isMax: boolean; title: string }) => {
 
 const UpgradeImage = ({ imagePath }: { imagePath: string }) => {
     return (
-        <div className='absolute left-0 right-0 top-[24%] flex items-center justify-center'>
-            <Image path={imagePath} className='h-[45px]' />
+        <div className='absolute left-0 right-0 top-[22%] flex items-center justify-center'>
+            <Image path={imagePath} className='h-[38px]' />
         </div>
     )
 }
@@ -40,7 +40,7 @@ const UpgradeDetails = ({ current, next }: { current: string; next: string | nul
     return (
         <div className='absolute left-0 right-0 top-[46%] flex items-center justify-center space-x-1 font-extrabold'>
             <Typography className='text-xs'>{current}</Typography>
-            <Typography className='text-[#CAFF1C]'>{next}</Typography>
+            <Typography className='text-sm text-[#CAFF1C]'>{next}</Typography>
         </div>
     )
 }
@@ -60,7 +60,7 @@ const UpgradePrice = ({ isMax, cost }: { isMax: boolean; cost: number | null }) 
         <div
             className={cn(
                 'absolute bottom-0 left-0 right-0',
-                'flex h-[40px]',
+                'flex h-[30px]',
                 'items-center justify-center',
                 'gap-2',
                 isMax ? 'bg-[#009AD6]' : 'bg-[#9800DE]'
@@ -68,8 +68,8 @@ const UpgradePrice = ({ isMax, cost }: { isMax: boolean; cost: number | null }) 
         >
             {isMax ? (
                 <>
-                    <Image path='igc.png' className='h-7' />
-                    <Typography className='font-black'>{cost}</Typography>
+                    <Image path='igc.png' className='h-6' />
+                    <Typography className='text-sm font-black'>{cost}</Typography>
                 </>
             ) : (
                 <CheckmarkIcon className='w-7' />
@@ -84,7 +84,6 @@ export const UpgradeCard = ({ upgradeType }: { upgradeType: DomeUpgradeType }) =
     const [searchParams] = useSearchParams()
     const [isHighlighted, setIsHighlighted] = useState(false)
 
-    // Проверяем, нужно ли подсветить эту карточку
     useEffect(() => {
         const highlightParam = searchParams.get('highlight')
         if (highlightParam === upgradeType) {
@@ -105,7 +104,7 @@ export const UpgradeCard = ({ upgradeType }: { upgradeType: DomeUpgradeType }) =
     const isMax = canUpgrade(game.dome, upgradeType)
     const name = getName(upgradeType)
     const title = getUpgradeTitle(upgradeType, currentLevel)
-    const imagePath = getImagePath(upgradeType)
+    const imagePath = getIconImagePath(upgradeType)
     const upgradeValues = getUpgradeValues(upgradeType, currentLevel)
 
     const handleUpgrade = () => {
@@ -119,7 +118,7 @@ export const UpgradeCard = ({ upgradeType }: { upgradeType: DomeUpgradeType }) =
     return (
         <button
             className={cn(
-                'relative h-[200px] w-[125px] overflow-y-scroll rounded-2xl border-2',
+                'relative h-[160px] w-[110px] overflow-y-scroll rounded-2xl border-2',
                 isMax ? 'border-[#00176C] bg-[#0EBDFD]' : 'border-[#540063] bg-[#D746FF]',
                 isHighlighted && 'border-4 border-yellow-400',
                 upgradeDomeMutation.isPending && 'opacity-50'

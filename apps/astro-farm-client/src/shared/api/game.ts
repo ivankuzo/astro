@@ -6,8 +6,8 @@ import {
     BuySeedsRequest,
     BuyBoostsRequest,
     UpgradeDomeRequest,
-    GrowthTimeReductionBoostRequest,
-    EnergyRestoreBoostRequest,
+    GrowthTimeBoostRequest,
+    EnergyBoostRequest,
 } from '@astro/astro-farm-api-contracts'
 
 export const getGame = async (): Promise<GameResponse> => {
@@ -40,9 +40,7 @@ export const upgradeDome = async (request: UpgradeDomeRequest): Promise<GameResp
     return data
 }
 
-export const growthTimeReductionBoost = async (
-    request: GrowthTimeReductionBoostRequest
-): Promise<GameResponse> => {
+export const growthTimeBoost = async (request: GrowthTimeBoostRequest): Promise<GameResponse> => {
     const { data } = await api.post<GameResponse>(
         '/game/use-growth-time-reduction-boost',
         request.body
@@ -50,9 +48,7 @@ export const growthTimeReductionBoost = async (
     return data
 }
 
-export const energyRestoreBoost = async (
-    request: EnergyRestoreBoostRequest
-): Promise<GameResponse> => {
+export const energyBoost = async (request: EnergyBoostRequest): Promise<GameResponse> => {
     const { data } = await api.post<GameResponse>('/game/use-energy-restore-boost', request.body)
     return data
 }

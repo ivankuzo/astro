@@ -8,8 +8,8 @@ import {
     harvestSchema,
     plantSchema,
     upgradeDomeSchema,
-    energyRestoreBoostSchema,
-    growthTimeReductionBoostSchema,
+    energyBoostSchema,
+    growthTimeBoostSchema,
 } from './schema'
 
 export type GameResponse = Game
@@ -29,11 +29,11 @@ export type BuyBoostsRequest = z.TypeOf<typeof buyBoostsSchema>
 export type UpgradeDomeRequest = z.TypeOf<typeof upgradeDomeSchema>
 //export type UpgradeDomeResponse = GameResponse
 
-export type GrowthTimeReductionBoostRequest = z.TypeOf<typeof growthTimeReductionBoostSchema>
-//export type GrowthTimeReductionBoostResponse = GameResponse
+export type GrowthTimeBoostRequest = z.TypeOf<typeof growthTimeBoostSchema>
+//export type GrowthTimeBoostResponse = GameResponse
 
-export type EnergyRestoreBoostRequest = z.TypeOf<typeof energyRestoreBoostSchema>
-//export type EnergyRestoreBoostResponse = GameResponse
+export type EnergyBoostRequest = z.TypeOf<typeof energyBoostSchema>
+//export type EnergyBoostResponse = GameResponse
 
 export type GetGameRequest = void
 //export type GetGameResponse = GameResponse

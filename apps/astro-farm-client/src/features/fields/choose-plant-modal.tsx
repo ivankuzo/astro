@@ -1,4 +1,4 @@
-import { SeedId, SeedType, SEEDS, FieldNumber } from '@astro/astro-farm-game-core'
+import { SeedId, SeedType, SEEDS, FieldNumber, getSeed } from '@astro/astro-farm-game-core'
 import { PlantCard } from '../../shared/components/plant-card'
 import { Button } from '../../shared/ui/button'
 import NiceModal from '@ebay/nice-modal-react'
@@ -33,6 +33,7 @@ const TabLabel = ({
 
 const PlantCardPlant = ({ seedId, fieldNumber }: { seedId: SeedId; fieldNumber: FieldNumber }) => {
     const plantMutation = usePlant()
+    const seed = getSeed(seedId)
 
     const handle = async () => {
         await plantMutation.mutateAsync({
@@ -48,11 +49,12 @@ const PlantCardPlant = ({ seedId, fieldNumber }: { seedId: SeedId; fieldNumber: 
         <PlantCard seedId={seedId}>
             <Button
                 variant='orange'
-                className='w-full'
+                className='w-full gap-1 text-2xl'
                 onClick={handle}
                 disabled={plantMutation.isPending}
             >
-                Plant
+                <Image path='energy.png' className='h-5' />
+                <span>{seed.plantEnergy}</span>
             </Button>
         </PlantCard>
     )
@@ -99,7 +101,6 @@ export const ChoosePlantModal = NiceModal.create(({ fieldNumber }: ChoosePlantMo
         setActiveTab(tabId)
     }
 
-    // Создаем функцию для генерации компонента TabLabel с учетом активности
     const getTabLabel = (id: string, icon: string, label: string) => {
         const isActive = activeTab === id
         return <TabLabel icon={icon} label={label} isActive={isActive} />
@@ -131,6 +132,7 @@ export const ChoosePlantModal = NiceModal.create(({ fieldNumber }: ChoosePlantMo
     return (
         <ModalTabs
             title='CHOOSE A PLANT'
+            className='h-[40vh] sm:h-[400px]'
             tabs={tabs}
             activeTab={activeTab}
             onTabChange={handleTabChange}

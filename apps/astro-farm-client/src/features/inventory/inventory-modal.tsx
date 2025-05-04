@@ -1,7 +1,7 @@
 import NiceModal from '@ebay/nice-modal-react'
 import { ModalTabs } from '../../shared/components/modals'
-import { InventoryBoosts } from './inventory-boosts'
-import { InventorySeeds } from './inventory-seeds'
+import { InventoryBoosts } from './boosts'
+import { InventorySeeds } from './seeds'
 
 export const InventoryModal = NiceModal.create(() => {
     const tabs = [
@@ -17,5 +17,5 @@ export const InventoryModal = NiceModal.create(() => {
         },
     ]
 
-    return <ModalTabs title='INVENTORY' tabs={tabs} />
+    return <ModalTabs title='INVENTORY' tabs={tabs} className='h-[40vh] sm:h-[400px]' />
 })

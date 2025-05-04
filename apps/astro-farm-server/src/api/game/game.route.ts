@@ -6,8 +6,8 @@ import {
     harvestSchema,
     plantSchema,
     upgradeDomeSchema,
-    energyRestoreBoostSchema,
-    growthTimeReductionBoostSchema,
+    energyBoostSchema,
+    growthTimeBoostSchema,
 } from '@astro/astro-farm-api-contracts'
 import { validateRequest } from '@astro/server/validation'
 import { requireAuth } from '@astro/session-server'
@@ -19,8 +19,8 @@ import {
     harvest,
     plant,
     upgradeDome,
-    useEnergyRestoreBoost,
-    useGrowthTimeReductionBoost,
+    useEnergyBoost,
+    useGrowthTimeBoost,
 } from './game.controller'
 
 const router = express.Router()
@@ -39,13 +39,9 @@ router.post('/upgrade-dome', validateRequest(upgradeDomeSchema), upgradeDome)
 
 router.post(
     '/use-growth-time-reduction-boost',
-    validateRequest(growthTimeReductionBoostSchema),
-    useGrowthTimeReductionBoost
+    validateRequest(growthTimeBoostSchema),
+    useGrowthTimeBoost
 )
-router.post(
-    '/use-energy-restore-boost',
-    validateRequest(energyRestoreBoostSchema),
-    useEnergyRestoreBoost
-)
+router.post('/use-energy-restore-boost', validateRequest(energyBoostSchema), useEnergyBoost)
 
 export const gameRouter = router

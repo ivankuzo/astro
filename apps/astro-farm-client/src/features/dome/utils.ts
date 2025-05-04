@@ -3,6 +3,7 @@ import {
     GROWTH_SPEED_LEVELS,
     ENERGY_CAPACITY_LEVELS,
     XP_GAIN_LEVELS,
+    IGC_NAME,
 } from '@astro/astro-farm-game-core'
 
 import { getMaxLevel, DomeUpgradeType } from '@astro/astro-farm-game-core'
@@ -24,7 +25,7 @@ export const getUpgradeTitle = (upgradeType: DomeUpgradeType, currentLevel: numb
 export const getName = (upgradeType: DomeUpgradeType): string => {
     switch (upgradeType) {
         case DomeUpgradeType.igcYield:
-            return 'IGC Yield Increase'
+            return `${IGC_NAME} Yield Increase`
         case DomeUpgradeType.growthSpeed:
             return 'Growth Speed Reduction'
         case DomeUpgradeType.energyCapacity:
@@ -36,18 +37,48 @@ export const getName = (upgradeType: DomeUpgradeType): string => {
     }
 }
 
-export const getImagePath = (upgradeType: DomeUpgradeType): string => {
+export const getPodiumTitle = (upgradeType: DomeUpgradeType): string => {
     switch (upgradeType) {
         case DomeUpgradeType.igcYield:
-            return 'dome-upgrades/igc-yield.png'
+            return IGC_NAME
         case DomeUpgradeType.growthSpeed:
-            return 'dome-upgrades/growth-speed.png'
+            return 'Growth'
         case DomeUpgradeType.energyCapacity:
-            return 'dome-upgrades/energy-capacity.png'
+            return 'Energy'
         case DomeUpgradeType.xpGain:
-            return 'dome-upgrades/xp-gain.png'
+            return 'XP'
+        default:
+            return ''
+    }
+}
+
+export const getIconImagePath = (upgradeType: DomeUpgradeType): string => {
+    switch (upgradeType) {
+        case DomeUpgradeType.igcYield:
+            return 'dome-upgrades/igc-yield/icon.png'
+        case DomeUpgradeType.growthSpeed:
+            return 'dome-upgrades/growth-speed/icon.png'
+        case DomeUpgradeType.energyCapacity:
+            return 'dome-upgrades/energy-capacity/icon.png'
+        case DomeUpgradeType.xpGain:
+            return 'dome-upgrades/xp-gain/icon.png'
         case DomeUpgradeType.totalUnlockedFields:
-            return 'dome-upgrades/total-unlocked-fields.png'
+            return 'dome-upgrades/total-unlocked-fields/icon.png'
+    }
+}
+
+export const getPodiumImagePath = (upgradeType: DomeUpgradeType, level: number): string => {
+    switch (upgradeType) {
+        case DomeUpgradeType.igcYield:
+            return `dome-upgrades/igc-yield/${level}.png`
+        case DomeUpgradeType.growthSpeed:
+            return `dome-upgrades/growth-speed/${level}.png`
+        case DomeUpgradeType.energyCapacity:
+            return `dome-upgrades/energy-capacity/${level}.png`
+        case DomeUpgradeType.xpGain:
+            return `dome-upgrades/xp-gain/${level}.png`
+        default:
+            return ''
     }
 }
 

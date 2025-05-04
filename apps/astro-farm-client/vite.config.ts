@@ -9,10 +9,7 @@ import { ManifestOptions, VitePWA } from 'vite-plugin-pwa'
 const manifest: Partial<ManifestOptions> = {
     theme_color: '#4B009A',
     background_color: '#4B009A',
-    icons: [
-        { purpose: 'maskable', sizes: '512x512', src: 'icon512_maskable.png', type: 'image/png' },
-        { purpose: 'any', sizes: '512x512', src: 'icon512_rounded.png', type: 'image/png' },
-    ],
+    icons: [{ purpose: 'any', sizes: '512x512', src: 'icon512.png', type: 'image/png' }],
     orientation: 'portrait-primary',
     display: 'standalone',
     lang: 'en-GB',
@@ -49,7 +46,7 @@ export default defineConfig({
         VitePWA({
             registerType: 'autoUpdate',
             workbox: {
-                globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+                globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf}'],
             },
             manifest,
         }),
