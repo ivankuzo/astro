@@ -8,7 +8,7 @@ export const ShopNavigation = () => {
 
     return (
         <div className='relative flex h-full flex-col'>
-            <div className='mx-auto max-w-md flex-1  overflow-auto px-4 pb-24'>
+            <div className='mx-auto max-w-md flex-1  overflow-auto pb-24'>
                 {activeTab === 'boosts' && <BoostsTab />}
                 {activeTab === 'seeds' && <SeedsTab />}
             </div>

@@ -1,5 +1,4 @@
 import { DomeUpgradeType } from '@astro/astro-farm-game-core'
-import { PodiumSVG } from '../../assets/svg'
 import { Typography, Image } from '../../shared/ui'
 import { getPodiumImagePath, getPodiumTitle } from './utils'
 import { useGame } from '../../shared/hooks/use-game'
@@ -10,13 +9,12 @@ type PodiumProps = {
 
 export const Podium = ({ upgradeType }: PodiumProps) => {
     const { data: game } = useGame()
-    if (!game) return null
-    const level = game.dome[upgradeType]
+    const level = game!.dome[upgradeType]
     const title = getPodiumTitle(upgradeType)
     const imagePath = getPodiumImagePath(upgradeType, level)
     return (
         <div className='relative flex items-center justify-center'>
-            <PodiumSVG />
+            <Image path='podium.png' className='w-full' />
             <Typography className='absolute bottom-[5%] left-1/2 -translate-x-1/2 text-xs font-bold'>
                 {title}
             </Typography>

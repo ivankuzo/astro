@@ -27,7 +27,7 @@ export const getName = (upgradeType: DomeUpgradeType): string => {
         case DomeUpgradeType.igcYield:
             return `${IGC_NAME} Yield Increase`
         case DomeUpgradeType.growthSpeed:
-            return 'Growth Speed Reduction'
+            return 'Growth Speed'
         case DomeUpgradeType.energyCapacity:
             return 'Energy Capacity Increase'
         case DomeUpgradeType.xpGain:

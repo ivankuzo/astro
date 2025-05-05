@@ -9,7 +9,7 @@ export interface RangeSliderProps extends WithClassName {
     onChange: (value: number) => void
 }
 
-export const RangeSlider = ({ value, maxValue = 20, onChange, className }: RangeSliderProps) => {
+export const RangeSlider = ({ value, maxValue = 10, onChange, className }: RangeSliderProps) => {
     const handleChange = (newValue: number) => {
         onChange(newValue)
     }

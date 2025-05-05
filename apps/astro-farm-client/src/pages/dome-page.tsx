@@ -5,10 +5,10 @@ import { GameContentLayout } from '../layouts/content'
 export const DomePage = () => {
     return (
         <div>
-            <GameContentLayout>
+            <GameContentLayout className='px-0'>
                 <div className='absolute bottom-[3%] w-full'>
                     <div className='mb-10 flex w-full items-center justify-center'>
-                        <div className='w-full max-w-[600px] px-16'>
+                        <div className='w-3/5 max-w-[600px]'>
                             <PodiumList />
                         </div>
                     </div>
