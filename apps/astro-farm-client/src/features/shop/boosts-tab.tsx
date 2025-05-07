@@ -8,7 +8,7 @@ export const BoostsTab = () => {
     //const boostTypes = Object.keys(BOOSTS) as BoostType[]
 
     return (
-        <div className='space-y-4'>
+        <div className='space-y-4 px-4'>
             {BOOSTS.map(boost => {
                 const boostId = getBoostId(boost)
                 return (

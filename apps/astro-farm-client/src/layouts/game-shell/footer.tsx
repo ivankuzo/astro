@@ -5,7 +5,7 @@ import { Image } from '../../shared/ui/image'
 import { cn } from '@astro/client-cn'
 
 const navigationItems = [
-    { path: '/shop', title: 'Shop', image: 'nav/shop.png' },
+    { path: '/shop/seeds', title: 'Shop', image: 'nav/shop.png', pattern: '/shop/*' },
     { path: '/dome', title: 'Dome', image: 'nav/dome.png' },
     { path: '/fields', title: 'Fields', image: 'nav/fields.png' },
     { path: '/player', title: 'Player', image: 'nav/lock.png' },
@@ -28,10 +28,11 @@ interface ItemProps {
     path: string
     title: string
     image: string
+    pattern?: string
 }
 
-const Item = ({ path, title, image }: ItemProps) => {
-    const isActive = useMatch(path)
+const Item = ({ path, title, image, pattern }: ItemProps) => {
+    const isActive = useMatch(pattern || path)
 
     return (
         <NavLink

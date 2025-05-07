@@ -11,7 +11,8 @@ type UpgradeItemProps = {
 export const UpgradeItem = ({ upgradeType, className }: UpgradeItemProps) => {
     const { data: game } = useGame()
     if (!game) return null
-    const level = game.dome[upgradeType]
+    // const level = game.dome[upgradeType]
+    const level = 1
     const imagePath = getPodiumImagePath(upgradeType, level)
 
     return <Image path={imagePath} className={cn(className)} />

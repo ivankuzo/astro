@@ -13,7 +13,7 @@ import { getUnixTime } from 'date-fns'
 
 const GAME_DEFAULTS = {
     xp: 0,
-    igc: 500,
+    igc: 5000,
     energy: 100,
     unlockedFields: 3,
 }

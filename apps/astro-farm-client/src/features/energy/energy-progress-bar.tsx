@@ -9,7 +9,7 @@ const EnergyRegenInfo = () => {
     const text = `+${energyRegenPer5Minutes} energy / 5 min`
 
     return (
-        <div className='absolute -top-6 left-0 ml-4'>
+        <div className='absolute -top-6 left-6 right-0 text-center'>
             <Typography className='text-xs' textStroke='black'>
                 {text}
             </Typography>

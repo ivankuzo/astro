@@ -57,7 +57,7 @@ const ImmatureField = ({ fieldNumber, field }: OccupiedFieldProps) => {
 
     return (
         <Popover>
-            <PopoverButton>
+            <PopoverButton tabIndex={-1} className='focus:outline-none'>
                 <Image path='field.png' className='w-full' />
             </PopoverButton>
             <Image
@@ -74,7 +74,7 @@ const MatureField = ({ fieldNumber, field }: OccupiedFieldProps) => {
 
     return (
         <Popover>
-            <PopoverButton>
+            <PopoverButton tabIndex={-1} className='focus:outline-none'>
                 <Image path='field.png' className='w-full' />
             </PopoverButton>
             <Image

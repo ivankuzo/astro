@@ -9,6 +9,7 @@ import { Typography } from '../../shared/ui/typography'
 import { Image } from '../../shared/ui/image'
 import { useState } from 'react'
 import { cn } from '@astro/client-cn'
+import { NavLink } from 'react-router-dom'
 
 const TabLabel = ({
     icon,
@@ -67,6 +68,7 @@ const SeedContent = ({
     type: SeedType | 'all'
     fieldNumber: FieldNumber
 }) => {
+    const modal = NiceModal.useModal()
     const { data: game } = useGame()
 
     if (!game) return null
@@ -81,11 +83,28 @@ const SeedContent = ({
     )
 
     return (
-        <div className='grid grid-cols-3 gap-2'>
-            {availableSeeds.map(seed => {
-                const seedId = `${seed.type}_${seed.level}` as SeedId
-                return <PlantCardPlant key={seedId} seedId={seedId} fieldNumber={fieldNumber} />
-            })}
+        <div>
+            {availableSeeds.length > 0 ? (
+                <div className='grid grid-cols-3 gap-2'>
+                    {availableSeeds.map(seed => {
+                        const seedId = `${seed.type}_${seed.level}` as SeedId
+                        return (
+                            <PlantCardPlant
+                                key={seedId}
+                                seedId={seedId}
+                                fieldNumber={fieldNumber}
+                            />
+                        )
+                    })}
+                </div>
+            ) : (
+                <div className='mt-8 flex flex-col items-center space-y-2'>
+                    <Typography textStroke='black'>No seeds available</Typography>
+                    <NavLink to='/shop/seeds' onClick={() => modal.remove()}>
+                        <Button variant='blue'>Go To Shop</Button>
+                    </NavLink>
+                </div>
+            )}
         </div>
     )
 }

@@ -64,7 +64,10 @@ const InfoButton = ({ seedId }: { seedId: SeedId }) => {
     }
 
     return (
-        <PopoverButton className='absolute right-0 top-0 z-30 w-4 cursor-pointer focus:outline-none'>
+        <PopoverButton
+            tabIndex={-1}
+            className='absolute right-0 top-0 z-30 w-4 cursor-pointer focus:outline-none'
+        >
             <InfoIcon />
         </PopoverButton>
     )

@@ -7,6 +7,7 @@ import { Button } from '../../shared/ui/button'
 
 import { useGame, useGrowthTimeBoost } from '../../shared/hooks'
 import { Typography } from '../../shared/ui'
+import { NavLink } from 'react-router-dom'
 const BoostCardChoose = ({
     boostId,
     fieldNumber,
@@ -35,6 +36,7 @@ const BoostCardChoose = ({
     )
 }
 export const BoostPlantModal = NiceModal.create(({ fieldNumber }: { fieldNumber: FieldNumber }) => {
+    const modal = NiceModal.useModal()
     const { data: game } = useGame()
     const boostInventory = game?.boostInventory
     if (!boostInventory) return null
@@ -55,8 +57,11 @@ export const BoostPlantModal = NiceModal.create(({ fieldNumber }: { fieldNumber:
                     ))}
                 </div>
             ) : (
-                <div className='mt-4 text-center'>
+                <div className='mt-8 flex flex-col items-center space-y-2'>
                     <Typography textStroke='black'>No growth time boosts available</Typography>
+                    <NavLink to='/shop/boosts' onClick={() => modal.remove()}>
+                        <Button variant='blue'>Go To Shop</Button>
+                    </NavLink>
                 </div>
             )}
         </Modal>

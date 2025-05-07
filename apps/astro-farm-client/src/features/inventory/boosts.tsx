@@ -8,6 +8,7 @@ import { Button } from '../../shared/ui/button'
 import { InventoryModal } from './inventory-modal'
 import NiceModal from '@ebay/nice-modal-react'
 import { Typography } from '../../shared/ui'
+import { NavLink } from 'react-router-dom'
 
 export const InventoryEnergyBoostCard = ({ boostId }: { boostId: BoostId<'energy'> }) => {
     const energyBoostMutation = useEnergyBoost()
@@ -50,6 +51,7 @@ export const InventoryGrowthTimeBoostCard = ({ boostId }: { boostId: BoostId<'gr
 }
 
 export const InventoryBoosts = () => {
+    const modal = NiceModal.useModal()
     const { data: game } = useGame()
     const boostInventory = game?.boostInventory
     if (!boostInventory) return null
@@ -68,8 +70,11 @@ export const InventoryBoosts = () => {
 
     if (energyBoostIds.length === 0 && growthTimeBoostIds.length === 0)
         return (
-            <div className='mt-4 text-center'>
+            <div className='mt-8 flex h-full flex-col items-center justify-center space-y-2'>
                 <Typography textStroke='black'>No boosts available</Typography>
+                <NavLink to='/shop/boosts' onClick={() => modal.remove()}>
+                    <Button variant='blue'>Go To Shop</Button>
+                </NavLink>
             </div>
         )
 

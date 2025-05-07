@@ -5,6 +5,7 @@ export const SignInButton = () => {
     const loginMutation = useLogin()
     return (
         <Button
+            className='w-full'
             variant='purple'
             onClick={() => loginMutation.mutate()}
             disabled={loginMutation.isPending}
