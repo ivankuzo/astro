@@ -39,28 +39,28 @@ export const FieldsPage = () => {
                         </div>
                         <XpItem
                             className={cn(
-                                'absolute w-[25%] sm:w-[10%]',
+                                'absolute w-[17%] sm:w-[10%]',
                                 'top-[2%] sm:top-[8%]',
                                 'left-[6%] sm:left-[12%]'
                             )}
                         />
                         <EnergyItem
                             className={cn(
-                                'absolute w-[25%] sm:w-[10%]',
-                                'top-[1%] sm:-top-[4%]',
-                                'left-[42%] sm:left-[45%]'
+                                'absolute w-[17%] sm:w-[10%]',
+                                'top-[0%] sm:-top-[4%]',
+                                'left-[39%] sm:left-[45%]'
                             )}
                         />
                         <GrowthItem
                             className={cn(
-                                'absolute w-[25%] sm:w-[10%]',
+                                'absolute w-[17%] sm:w-[10%]',
                                 '-top-[2%] sm:top-[0%]',
                                 'left-[60%] sm:left-[70%]'
                             )}
                         />
                         <IgcItem
                             className={cn(
-                                'absolute w-[25%] sm:w-[10%]',
+                                'absolute w-[17%] sm:w-[10%]',
                                 'top-[3%] sm:top-[20%]',
                                 'left-[80%] sm:left-[85%]'
                             )}
