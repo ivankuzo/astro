@@ -1,42 +1,23 @@
-const LEVEL_SPLIT = 11
-
-const EARLY_BASE_XP = 100
-const EARLY_MULTIPLIER = 250
-const EARLY_EXPONENT = 1.6
-
-const LATE_BASE_XP = 1000
-const LATE_MULTIPLIER = 400
-const LATE_EXPONENT = 1.8
-
-const getXpAtThresholdLevel = (): number => {
-    const levelBase = LEVEL_SPLIT - 1
-    return Math.round(LATE_MULTIPLIER * Math.pow(levelBase, LATE_EXPONENT) + LATE_BASE_XP)
-}
-
-const THRESHOLD_XP = getXpAtThresholdLevel()
+const BASE_XP = 100
+const MULTIPLIER = 250
+const BASE_EXPONENT = 1.5
+const EXPONENT_GROWTH = 0.03
 
 export const getXpForLevel = (level: number): number => {
     if (level < 2) return 0
-
     const base = level - 1
-
-    if (level < LEVEL_SPLIT) {
-        return Math.round(EARLY_MULTIPLIER * Math.pow(base, EARLY_EXPONENT) + EARLY_BASE_XP)
-    } else {
-        return Math.round(LATE_MULTIPLIER * Math.pow(base, LATE_EXPONENT) + LATE_BASE_XP)
-    }
+    const exponent = BASE_EXPONENT + (base - 1) * EXPONENT_GROWTH
+    return Math.round(MULTIPLIER * Math.pow(base, exponent) + BASE_XP)
 }
 
 export const getLevelByXp = (xp: number): number => {
-    if (xp < EARLY_BASE_XP) return 1
+    if (xp < BASE_XP) return 1
 
-    if (xp < THRESHOLD_XP) {
-        const level = 1 + Math.pow((xp - EARLY_BASE_XP) / EARLY_MULTIPLIER, 1 / EARLY_EXPONENT)
-        return Math.floor(level)
-    } else {
-        const level = 1 + Math.pow((xp - LATE_BASE_XP) / LATE_MULTIPLIER, 1 / LATE_EXPONENT)
-        return Math.floor(level)
+    let level = 1
+    while (getXpForLevel(level + 1) <= xp) {
+        level++
     }
+    return level
 }
 
 export const getPreviousLevelThreshold = (xp: number): number => {
