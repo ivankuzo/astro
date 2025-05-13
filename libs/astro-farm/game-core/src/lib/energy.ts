@@ -1,7 +1,7 @@
 import { getUnixTime } from 'date-fns'
 import { Game } from './game'
 
-export const ENERGY_REGEN = 12 / 60 / 60
+export const ENERGY_REGEN = 30 / 60 / 60
 
 //export const ENERGY_REGEN_LEVEL_BONUS = 0.2 / 60 / 60
 
