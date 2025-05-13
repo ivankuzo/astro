@@ -5,8 +5,8 @@ import NiceModal from '@ebay/nice-modal-react'
 import { EnergyBoostsModal } from '../inventory/energy-boosts-modal'
 
 const EnergyRegenInfo = () => {
-    const energyRegenPer5Minutes = ENERGY_REGEN * 60 * 5
-    const text = `+${energyRegenPer5Minutes} energy / 5 min`
+    const energyRegenPer2Minutes = ENERGY_REGEN * 60 * 2
+    const text = `+${energyRegenPer2Minutes} energy / 2 min`
 
     return (
         <div className='absolute -top-6 left-6 right-0 text-center'>
