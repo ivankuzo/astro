@@ -1,8 +1,17 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom'
-import { ShopPage, DomePage, FieldsPage, PlayerPage, WalletPage, LoginPage } from '../../pages'
+import {
+    ShopPage,
+    DomePage,
+    FieldsPage,
+    //PlayerPage,
+    MiniGamesPage,
+    WalletPage,
+    LoginPage,
+} from '../../pages'
 import { AuthOnlyRoute, GuestOnlyRoute } from '@astro/session-client'
 import { GameShell } from '../../layouts/game-shell/game-shell'
 import { useOnboarding } from '../../features/onboarding'
+import { PipesGamePage } from '../../pages/pipes-game-page'
 
 const GameShellWrapper = () => {
     useOnboarding()
@@ -26,9 +35,11 @@ export const AppRouter = () => {
                     <Route path='/shop/:category' element={<ShopPage />} />
                     <Route path='/dome' element={<DomePage />} />
                     <Route path='/fields' element={<FieldsPage />} />
-                    <Route path='/player' element={<PlayerPage />} />
+                    {/* <Route path='/player' element={<PlayerPage />} /> */}
+                    <Route path='/mini-games' element={<MiniGamesPage />} />
                     <Route path='/wallet' element={<WalletPage />} />
                 </Route>
+                <Route path='/mini-games/pipes' element={<PipesGamePage />} />
             </Route>
 
             <Route path='*' element={<Navigate to='/fields' replace />} />

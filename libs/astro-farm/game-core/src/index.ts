@@ -6,3 +6,5 @@ export * from './lib/game'
 export * from './lib/igc'
 export * from './lib/seeds'
 export * from './lib/xp'
+
+export * from './lib/pipes'

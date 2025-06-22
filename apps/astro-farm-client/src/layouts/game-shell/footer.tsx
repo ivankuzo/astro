@@ -8,7 +8,8 @@ const navigationItems = [
     { path: '/shop/seeds', title: 'Shop', image: 'nav/shop.png', pattern: '/shop/*' },
     { path: '/dome', title: 'Dome', image: 'nav/dome.png' },
     { path: '/fields', title: 'Fields', image: 'nav/fields.png' },
-    { path: '/player', title: 'Player', image: 'nav/lock.png' },
+    // { path: '/player', title: 'Player', image: 'nav/lock.png' },
+    { path: '/mini-games', title: 'Games', image: 'nav/gamepad.png' },
     { path: '/wallet', title: 'Wallet', image: 'nav/wallet.png' },
 ]
 
