@@ -37,3 +37,8 @@ export type EnergyBoostRequest = z.TypeOf<typeof energyBoostSchema>
 
 export type GetGameRequest = void
 //export type GetGameResponse = GameResponse
+
+export type LeaderboardEntry = {
+    walletAddress: string
+    xp: number
+}

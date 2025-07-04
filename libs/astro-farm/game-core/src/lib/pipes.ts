@@ -149,6 +149,7 @@ export const generateLevel = (): { map: LevelMap; source: SourcePipeCoordinates 
         x: Math.floor(Math.random() * GRID_WIDTH),
         y: Math.floor(Math.random() * GRID_HEIGHT),
     }
+
     const visited: boolean[][] = Array.from({ length: GRID_HEIGHT }, () =>
         Array(GRID_WIDTH).fill(false)
     )

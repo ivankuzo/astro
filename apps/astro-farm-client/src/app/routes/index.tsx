@@ -12,6 +12,7 @@ import { AuthOnlyRoute, GuestOnlyRoute } from '@astro/session-client'
 import { GameShell } from '../../layouts/game-shell/game-shell'
 import { useOnboarding } from '../../features/onboarding'
 import { PipesGamePage } from '../../pages/pipes-game-page'
+import { LeaderboardPage } from '../../pages/leaderboard-page'
 
 const GameShellWrapper = () => {
     useOnboarding()
@@ -38,6 +39,7 @@ export const AppRouter = () => {
                     {/* <Route path='/player' element={<PlayerPage />} /> */}
                     <Route path='/mini-games' element={<MiniGamesPage />} />
                     <Route path='/wallet' element={<WalletPage />} />
+                    <Route path='/leaderboard' element={<LeaderboardPage />} />
                 </Route>
                 <Route path='/mini-games/pipes' element={<PipesGamePage />} />
             </Route>

@@ -52,7 +52,7 @@ export const GameList = () => {
     const realGames = [
         {
             to: '/mini-games/pipes',
-            imagePath: 'mini-games/pipes/images/background.png',
+            imagePath: 'mini-games/pipes/images/preview.png',
             name: 'Astro Pipes',
             description: 'Get your plant fertilizer system fixed!',
         },

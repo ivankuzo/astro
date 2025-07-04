@@ -74,24 +74,6 @@
     font-display: swap;
 }
 
-/* For Phaser/canvas text rendering (separate font-family per weight) */
-
-@font-face {
-    font-family: 'Fira Sans SemiBold';
-    src: url('./assets/fonts/FiraSans-SemiBold.ttf') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'Fira Sans Black';
-    src: url('./assets/fonts/FiraSans-Black.ttf') format('truetype');
-    font-weight: 900;
-    font-style: bold;
-    font-display: swap;
-}
-
 ::-webkit-scrollbar {
     display: none;
 }

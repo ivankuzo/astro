@@ -8,6 +8,7 @@ import {
     UpgradeDomeRequest,
     GrowthTimeBoostRequest,
     EnergyBoostRequest,
+    LeaderboardEntry,
 } from '@astro/astro-farm-api-contracts'
 
 export const getGame = async (): Promise<GameResponse> => {
@@ -50,5 +51,10 @@ export const growthTimeBoost = async (request: GrowthTimeBoostRequest): Promise<
 
 export const energyBoost = async (request: EnergyBoostRequest): Promise<GameResponse> => {
     const { data } = await api.post<GameResponse>('/game/use-energy-restore-boost', request.body)
+    return data
+}
+
+export const getLeaderboard = async (): Promise<LeaderboardEntry[]> => {
+    const { data } = await api.get<LeaderboardEntry[]>('/game/leaderboard')
     return data
 }

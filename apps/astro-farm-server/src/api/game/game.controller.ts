@@ -9,6 +9,7 @@ import {
     UpgradeDomeRequest,
     EnergyBoostRequest,
     GrowthTimeBoostRequest,
+    LeaderboardEntry,
 } from '@astro/astro-farm-api-contracts'
 
 import * as UseCase from '../../use-case'
@@ -91,4 +92,9 @@ export const useEnergyBoost = async (
     const game = await UseCase.useEnergyBoost(res.locals.walletAddress, req.body.boostId)
 
     res.send({ ...game.toObject() })
+}
+
+export const getLeaderboardHandler = async (req: Request, res: Response<LeaderboardEntry[]>) => {
+    const data = await UseCase.getLeaderboard()
+    res.send(data)
 }

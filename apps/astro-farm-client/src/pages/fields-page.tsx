@@ -7,6 +7,18 @@ import { cn } from '@astro/client-cn'
 
 import { IgcItem, GrowthItem, XpItem, EnergyItem } from '../features/dome/upgrade-items'
 import { OnboardingButton } from '../features/onboarding/onboarding-button'
+import { Button, Image } from '../shared/ui'
+import { NavLink } from 'react-router-dom'
+
+export const LeaderboardButton = () => {
+    return (
+        <NavLink to='/leaderboard'>
+            <Button variant='purple' className='aspect-square px-2'>
+                <Image path='nav/trophy.png' className='h-6' />
+            </Button>
+        </NavLink>
+    )
+}
 
 export const FieldsPage = () => {
     return (
@@ -70,7 +82,10 @@ export const FieldsPage = () => {
             </div>
             <div className={cn('absolute bottom-8 w-full', ' px-8')}>
                 <div className='flex w-full items-center justify-between pb-4'>
-                    <OnboardingButton />
+                    <div className='flex items-center gap-2'>
+                        <OnboardingButton />
+                        <LeaderboardButton />
+                    </div>
                     <InventoryButton />
                 </div>
                 <EnergyProgressBar />

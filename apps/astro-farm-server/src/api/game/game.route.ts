@@ -21,6 +21,7 @@ import {
     upgradeDome,
     useEnergyBoost,
     useGrowthTimeBoost,
+    getLeaderboardHandler,
 } from './game.controller'
 
 const router = express.Router()
@@ -43,5 +44,7 @@ router.post(
     useGrowthTimeBoost
 )
 router.post('/use-energy-restore-boost', validateRequest(energyBoostSchema), useEnergyBoost)
+
+router.get('/leaderboard', getLeaderboardHandler)
 
 export const gameRouter = router
